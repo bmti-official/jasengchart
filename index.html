@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Therapy Chart - Manual Therapy Workflow</title>
+
+    <!-- Load Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            bg: '#F9F9F9',
+                            green: '#0F4C3A',
+                            greenHover: '#0A3327'
+                        }
+                    },
+                    transitionProperty: {
+                        'color': 'color',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #F9F9F9;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .card-shadow {
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+        }
+
+        .scroll-text {
+            transition: color 0.3s ease-in-out, transform 0.3s ease;
+        }
+
+        .scroll-text.active {
+            color: #111827;
+            /* gray-900 */
+            font-weight: 600;
+            transform: translateX(4px);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #F9F9F9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #e5e7eb;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d1d5db;
+        }
+
+        /* Form Controls Styling */
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            border-radius: 0.5rem;
+            border: 1px solid #E5E7EB;
+            padding: 0.625rem 0.875rem;
+            font-size: 0.875rem;
+            color: #111827;
+            background-color: #F9FAFB;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #0F4C3A;
+            background-color: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(15, 76, 58, 0.1);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #4B5563;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Custom Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #0F4C3A;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type=range]::-moz-range-thumb {
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #0F4C3A;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: #E5E7EB;
+            border-radius: 4px;
+        }
+
+        input[type=range]::-moz-range-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: #E5E7EB;
+            border-radius: 4px;
+        }
+
+        input[type=range]:focus {
+            outline: none;
+        }
+
+        /* Custom Checkbox Pill */
+        .check-pill input:checked+span {
+            background-color: #0F4C3A;
+            color: white;
+            border-color: #0F4C3A;
+        }
+    </style>
+</head>
+
+<body class="text-gray-900 font-sans relative">
+
+    <!-- Fixed Navigation Bar -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-brand-bg/90 backdrop-blur-md px-6 py-4 flex justify-between items-center transition-all duration-300 border-b border-transparent"
+        id="navbar">
+        <div class="hidden lg:flex space-x-8 font-medium text-[14px] text-gray-500 w-1/3">
+        </div>
+
+        <div
+            class="text-xl font-bold tracking-[0.15em] uppercase w-1/3 text-center text-brand-green flex justify-center items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            TherapyChart
+        </div>
+
+        <div class="flex items-center justify-end space-x-2 w-1/3">
+            <button id="openPasteBtn" type="button"
+                class="whitespace-nowrap shrink-0 bg-white border border-brand-green/20 text-brand-green hover:bg-brand-green/5 px-3 py-2 rounded-full text-sm font-bold transition-colors shadow-sm flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                <span class="hidden sm:inline">챠트 </span>불러오기
+            </button>
+            <button id="resetBtn" type="button"
+                class="whitespace-nowrap shrink-0 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-3 py-2 rounded-full text-sm font-medium transition-colors shadow-sm flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                초기화
+            </button>
+            <button id="copyBtn" type="button"
+                class="whitespace-nowrap shrink-0 bg-brand-green hover:bg-brand-greenHover text-white px-4 py-2 rounded-full text-sm font-medium transition-colors shadow-sm flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                복사하기
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-2 sm:px-6 pt-28 pb-32 flex gap-4 md:gap-10 relative items-start">
+
+        <!-- Sidebar Navigation -->
+        <aside class="w-28 sm:w-32 md:w-1/5 sticky top-32 shrink-0">
+            <div class="space-y-4 md:space-y-6 pl-2 md:pl-4 border-l-2 border-gray-100">
+                <a href="#section-session" class="nav-link block text-gray-400 text-xs md:text-sm scroll-text font-medium">도수치료 챠트 입력</a>
+                <a href="#section-subjective" class="nav-link block text-gray-400 text-xs md:text-sm scroll-text">S) Subjective</a>
+                <a href="#section-objective" class="nav-link block text-gray-400 text-xs md:text-sm scroll-text">O) Objective</a>
+                <a href="#section-assessment" class="nav-link block text-gray-400 text-xs md:text-sm scroll-text">A) Assessment</a>
+                <a href="#section-plan" class="nav-link block text-gray-400 text-xs md:text-sm scroll-text">P) Plan</a>
+            </div>
+        </aside>
+
+        <!-- Form Area -->
+        <form id="chartForm" class="flex-1 space-y-12 min-w-0">
+
+            <div class="mb-8 hidden md:block">
+                <h1 class="text-2xl font-bold text-gray-900">도수치료 챠트 입력</h1>
+                <p class="text-sm text-gray-500 mt-1">새로운 세션 기록을 작성합니다.</p>
+            </div>
+
+            <!-- 치료 시간 (Session Info) -->
+            <section id="section-session" class="scroll-section">
+                <div class="bg-white rounded-2xl card-shadow p-8 border border-gray-100">
+                    <h2 class="text-lg font-semibold text-brand-green mb-6 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        치료 시간
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label class="form-label">시작 시간</label>
+                            <select id="f_startTime" class="form-select"></select>
+                        </div>
+                        <div>
+                            <label class="form-label">종료 시간</label>
+                            <select id="f_endTime" class="form-select"></select>
+                        </div>
+                        <div>
+                            <label class="form-label">총 치료 시간</label>
+                            <div class="form-input bg-gray-50 text-gray-500 font-semibold cursor-not-allowed flex items-center h-[42px]"
+                                id="f_totalTime">30분</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- S) Subjective -->
+            <section id="section-subjective" class="scroll-section">
+                <div class="bg-white rounded-2xl card-shadow p-8 border border-gray-100">
+                    <h2 class="text-lg font-semibold text-brand-green mb-6 flex items-center gap-2">
+                        <span
+                            class="bg-brand-green/10 text-brand-green rounded-full w-6 h-6 flex items-center justify-center text-xs">S</span>
+                        Subjective
+                    </h2>
+
+                    <div class="space-y-8">
+                        <div>
+                            <label class="form-label">1. C/C (주호소 / Chief Complaint)</label>
+                            <input id="f_cc" type="text" class="form-input"
+                                placeholder="예: 허리가 전체적으로 다 불편하고 아픔. 간혹 다리까지 저림" value="">
+                        </div>
+
+                        <div>
+                            <label class="form-label">2. 통증 변화 기록</label>
+                            <div class="flex flex-wrap gap-2">
+                                <label class="cursor-pointer check-pill">
+                                    <input type="radio" name="painChange" value="첫 회차 (생략)" class="peer sr-only">
+                                    <span
+                                        class="block px-4 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">첫
+                                        회차 (생략)</span>
+                                </label>
+                                <label class="cursor-pointer check-pill">
+                                    <input type="radio" name="painChange" value="증가" class="peer sr-only">
+                                    <span
+                                        class="block px-4 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">증가</span>
+                                </label>
+                                <label class="cursor-pointer check-pill">
+                                    <input type="radio" name="painChange" value="감소" class="peer sr-only">
+                                    <span
+                                        class="block px-4 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">감소</span>
+                                </label>
+                                <label class="cursor-pointer check-pill">
+                                    <input type="radio" name="painChange" value="간헐적" class="peer sr-only" checked>
+                                    <span
+                                        class="block px-4 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">간헐적</span>
+                                </label>
+                                <label class="cursor-pointer check-pill">
+                                    <input type="radio" name="painChange" value="변화 없음" class="peer sr-only">
+                                    <span
+                                        class="block px-4 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">변화
+                                        없음</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-end mb-2">
+                                <label class="form-label mb-0">3. Pain intensity (VAS)</label>
+                                <span class="text-brand-green font-bold text-lg" id="vasDisplay">7/10</span>
+                            </div>
+                            <div
+                                class="flex flex-col md:flex-row gap-8 items-center bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                <div class="w-full md:w-1/2">
+                                    <input type="range" id="f_vasScore" name="vasScore" min="0" max="10" value="7">
+                                    <div class="flex justify-between text-xs text-gray-400 mt-2 font-medium px-1">
+                                        <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/2">
+                                    <div class="flex flex-wrap gap-2">
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="painFreq"
+                                                value="지속적" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">지속적</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="painFreq"
+                                                value="간헐적" class="peer sr-only" checked><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">간헐적</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="painFreq"
+                                                value="동작시 발생" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">동작시
+                                                발생</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="painFreq"
+                                                value="야간통" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">야간통</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- O) Objective -->
+            <section id="section-objective" class="scroll-section">
+                <div class="bg-white rounded-2xl card-shadow p-8 border border-gray-100">
+                    <h2 class="text-lg font-semibold text-brand-green mb-6 flex items-center gap-2">
+                        <span
+                            class="bg-brand-green/10 text-brand-green rounded-full w-6 h-6 flex items-center justify-center text-xs">O</span>
+                        Objective
+                    </h2>
+
+                    <div class="space-y-8">
+                        <!-- 1. 부종 -->
+                        <div class="pb-6 border-b border-gray-100">
+                            <h3 class="text-sm font-semibold text-gray-900 mb-4">1. 부종</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                                <div>
+                                    <label class="form-label">Swelling</label>
+                                    <div class="flex gap-2">
+                                        <label class="cursor-pointer check-pill"><input type="radio" name="swelling"
+                                                value="있음" class="peer sr-only" checked><span
+                                                class="block px-4 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">있음</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="radio" name="swelling"
+                                                value="없음" class="peer sr-only"><span
+                                                class="block px-4 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">없음</span></label>
+                                    </div>
+                                </div>
+                                <div id="swellingLocContainer">
+                                    <label class="form-label">부위</label>
+                                    <input id="f_swellingLoc" type="text" class="form-input" placeholder="예: 종아리, 발목"
+                                        value="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. 통증 -->
+                        <div class="pb-6 border-b border-gray-100">
+                            <h3 class="text-sm font-semibold text-gray-900 mb-4">2. 통증</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="form-label">Pain pattern</label>
+                                    <div class="flex flex-wrap gap-2">
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="painPattern" value="Pain with movement (움직일 때 통증)"
+                                                class="peer sr-only" checked><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Pain
+                                                with movement (움직일 때 통증)</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="painPattern" value="Radiating pain (방사통)"
+                                                class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Radiating
+                                                pain (방사통)</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="painPattern" value="Pain during loading (부하 시 통증)"
+                                                class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Pain
+                                                during loading (부하 시 통증)</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="painPattern" value="End-range pain (관절 끝범위 통증)"
+                                                class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">End-range
+                                                pain (관절 끝범위 통증)</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="painPattern" value="Constant pain (지속성 통증)"
+                                                class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Constant
+                                                pain (지속성 통증)</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="painPattern" value="Night pain (야간통)" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Night
+                                                pain (야간통)</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="painPattern" value="Resting pain (안정 시 통증)"
+                                                class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Resting
+                                                pain (안정 시 통증)</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="painPattern" value="Morning stiffness (아침 강직)"
+                                                class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Morning
+                                                stiffness (아침 강직)</span></label>
+                                    </div>
+                                </div>
+                                <div class="w-full md:w-1/2">
+                                    <label class="form-label">Pain-provoking activity</label>
+                                    <input id="f_painProvoking" type="text" class="form-input" placeholder="예: 자세 변경 시"
+                                        value="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 치료 부위 선택기 -->
+                        <div class="pb-6 border-b border-gray-100 bg-brand-bg/30 p-6 rounded-xl border border-gray-200">
+                            <h3 class="text-sm font-bold text-brand-green mb-4 flex justify-between items-center">
+                                치료 부위 선택 (최대 2개)
+                                <span class="text-xs font-normal text-gray-500" id="regionCountText">0개 선택됨</span>
+                            </h3>
+                            <div class="flex flex-wrap gap-2" id="regionSelector">
+                                <!-- JS에서 채워짐 -->
+                            </div>
+                        </div>
+
+                        <!-- 동적 폼 영역 -->
+                        <div id="dynamicRegionsContainer" class="space-y-8">
+                            <p
+                                class="text-sm text-gray-400 text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                                위의 '치료 부위'를 선택하시면 해당 부위의 ROM, MMT, Special Test 항목이 여기에 나타납니다.
+                            </p>
+                        </div>
+
+                        <!-- 6. 자세 & 보행 (항상 표시) -->
+                        <div class="pt-4">
+                            <h3 class="text-sm font-semibold text-gray-900 mb-4">6. 자세 & 보행</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="form-label">Posture findings</label>
+                                    <div class="flex flex-wrap gap-2">
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="posture"
+                                                value="Sway back posture" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Sway
+                                                back posture</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="posture"
+                                                value="Forward head" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Forward
+                                                head</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="posture"
+                                                value="Rounded shoulders" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Rounded
+                                                shoulders</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="posture"
+                                                value="Shoulder asymmetry" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Shoulder
+                                                asymmetry</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="posture"
+                                                value="Scapular winging" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Scapular
+                                                winging</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="posture"
+                                                value="Flat back posture" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Flat
+                                                back posture</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="posture"
+                                                value="Hyperlordotic posture" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Hyperlordotic
+                                                posture</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="posture"
+                                                value="Pelvic tilt : Anterior" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Pelvic
+                                                tilt : Anterior</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="posture"
+                                                value="Pelvic tilt : Posterior" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Pelvic
+                                                tilt : Posterior</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="posture"
+                                                value="Trunk shift" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Trunk
+                                                shift</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="posture"
+                                                value="Genu valgum" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Genu
+                                                valgum</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="posture"
+                                                value="Genu varum" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Genu
+                                                varum</span></label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="form-label">Gait pattern</label>
+                                    <div class="flex flex-wrap gap-2">
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="gait"
+                                                value="Limited weight-bearing" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Limited
+                                                weight-bearing</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="gait"
+                                                value="Knee hyperextension gait" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Knee
+                                                hyperextension gait</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="gait"
+                                                value="Hyperlordotic gait" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Hyperlordotic
+                                                gait</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="gait"
+                                                value="Independent" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Independent</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="gait"
+                                                value="Antalgic gait (통증 회피 보행)" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Antalgic
+                                                gait (통증 회피 보행)</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="gait"
+                                                value="Limping gait (절뚝거림)" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Limping
+                                                gait (절뚝거림)</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="gait"
+                                                value="Trendelenburg gait" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Trendelenburg
+                                                gait</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="gait"
+                                                value="Gluteus maximus gait" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Gluteus
+                                                maximus gait</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="gait"
+                                                value="With assistive device" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">With
+                                                assistive device</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- A) Assessment -->
+            <section id="section-assessment" class="scroll-section">
+                <div class="bg-white rounded-2xl card-shadow p-8 border border-gray-100">
+                    <h2 class="text-lg font-semibold text-brand-green mb-6 flex items-center gap-2">
+                        <span
+                            class="bg-brand-green/10 text-brand-green rounded-full w-6 h-6 flex items-center justify-center text-xs">A</span>
+                        Assessment
+                    </h2>
+                    <div>
+                        <label class="form-label">Goal</label>
+                        <div class="flex flex-wrap gap-2">
+                            <label class="cursor-pointer check-pill"><input type="checkbox" name="goal"
+                                    value="Pain Reduction (통증 감소)" class="peer sr-only"><span
+                                    class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Pain
+                                    Reduction (통증 감소)</span></label>
+                            <label class="cursor-pointer check-pill"><input type="checkbox" name="goal"
+                                    value="Neuromuscular re-education(신경근 재교육)" class="peer sr-only"><span
+                                    class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Neuromuscular
+                                    re-education(신경근 재교육)</span></label>
+                            <label class="cursor-pointer check-pill"><input type="checkbox" name="goal"
+                                    value="Endurance Improvement (지구력 향상)" class="peer sr-only"><span
+                                    class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Endurance
+                                    Improvement (지구력 향상)</span></label>
+                            <label class="cursor-pointer check-pill"><input type="checkbox" name="goal"
+                                    value="Functional Task Performance (기능적 과제 수행력 향상)" class="peer sr-only"><span
+                                    class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Functional
+                                    Task Performance (기능적 과제 수행력 향상)</span></label>
+                            <label class="cursor-pointer check-pill"><input type="checkbox" name="goal"
+                                    value="Gait Pattern Correction (보행 패턴 교정)" class="peer sr-only"><span
+                                    class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Gait
+                                    Pattern Correction (보행 패턴 교정)</span></label>
+                            <label class="cursor-pointer check-pill"><input type="checkbox" name="goal"
+                                    value="Postural Alignment (자세 정렬 개선)" class="peer sr-only"><span
+                                    class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Postural
+                                    Alignment (자세 정렬 개선)</span></label>
+                            <label class="cursor-pointer check-pill"><input type="checkbox" name="goal"
+                                    value="Core Stability (코어 안정성)" class="peer sr-only"><span
+                                    class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Core
+                                    Stability (코어 안정성)</span></label>
+                            <label class="cursor-pointer check-pill"><input type="checkbox" name="goal"
+                                    value="Muscle Relaxation (근육 이완)" class="peer sr-only"><span
+                                    class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Muscle
+                                    Relaxation (근육 이완)</span></label>
+                            <label class="cursor-pointer check-pill"><input type="checkbox" name="goal"
+                                    value="ADL Improvement (일상생활동작 향상)" class="peer sr-only"><span
+                                    class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">ADL
+                                    Improvement (일상생활동작 향상)</span></label>
+                            <label class="cursor-pointer check-pill"><input type="checkbox" name="goal"
+                                    value="Strength Gain (근력 향상)" class="peer sr-only"><span
+                                    class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Strength
+                                    Gain (근력 향상)</span></label>
+                            <label class="cursor-pointer check-pill"><input type="checkbox" name="goal"
+                                    value="Improved Mobility (관절 가동성 향상)" class="peer sr-only"><span
+                                    class="block px-3 py-1.5 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">Improved
+                                    Mobility (관절 가동성 향상)</span></label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- P) Plan -->
+            <section id="section-plan" class="scroll-section">
+                <div class="bg-white rounded-2xl card-shadow p-8 border border-gray-100">
+                    <h2 class="text-lg font-semibold text-brand-green mb-6 flex items-center gap-2">
+                        <span
+                            class="bg-brand-green/10 text-brand-green rounded-full w-6 h-6 flex items-center justify-center text-xs">P</span>
+                        Plan
+                    </h2>
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="form-label text-sm font-bold text-gray-900 border-b border-gray-100 pb-3 mb-4">1.
+                                Techniques Used</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="text-xs font-semibold text-gray-500 mb-2 block tracking-wider">수동
+                                        중재</label>
+                                    <div class="flex flex-wrap gap-2">
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techPassive" value="breathing cueing" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">breathing
+                                                cueing</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techPassive" value="Manual Therapy" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Manual
+                                                Therapy</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techPassive" value="scapular setting" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">scapular
+                                                setting</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techPassive" value="Education" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Education</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techPassive" value="Postural Training" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Postural
+                                                Training</span></label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label
+                                        class="text-xs font-semibold text-gray-500 mb-2 block tracking-wider">적용부위</label>
+                                    <div class="flex flex-wrap gap-2">
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
+                                                value="Thoracolumbar" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Thoracolumbar</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
+                                                value="Shoulder" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Shoulder</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
+                                                value="Elbow" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Elbow</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
+                                                value="Wrist" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Wrist</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
+                                                value="Hip" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Hip</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
+                                                value="Knee" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Knee</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
+                                                value="Ankle" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Ankle</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
+                                                value="Cervical" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Cervical</span></label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="text-xs font-semibold text-gray-500 mb-2 block tracking-wider">능동
+                                        중재</label>
+                                    <div class="flex flex-wrap gap-2">
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techActive" value="Soft Tissue Mobilization"
+                                                class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Soft
+                                                Tissue Mobilization</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techActive" value="Trigger Point Release"
+                                                class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Trigger
+                                                Point Release</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techActive" value="Joint Mobilization" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Joint
+                                                Mobilization</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techActive" value="Myofascial Release (MFR)"
+                                                class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Myofascial
+                                                Release (MFR)</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techActive" value="MET (근에너지 기법)" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">MET
+                                                (근에너지 기법)</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techActive" value="Neural Mobilization" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Neural
+                                                Mobilization</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techActive" value="Manual Traction" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Manual
+                                                Traction</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techActive" value="Passive Stretching" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Passive
+                                                Stretching</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techActive" value="MWM (움직임 동반 가동술)" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">MWM
+                                                (움직임 동반 가동술)</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techActive" value="PNF" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">PNF</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox"
+                                                name="techActive" value="Sling" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Sling</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <label
+                                    class="form-label text-sm font-bold text-gray-900 border-b border-gray-100 pb-3 mb-4">2.
+                                    Patient Response</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <label class="cursor-pointer check-pill"><input type="checkbox" name="ptResponse"
+                                            value="Improved Mobility (관절 가동성 향상)" class="peer sr-only"><span
+                                            class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Improved
+                                            Mobility (관절 가동성 향상)</span></label>
+                                    <label class="cursor-pointer check-pill"><input type="checkbox" name="ptResponse"
+                                            value="Muscle Relaxation (근육 이완)" class="peer sr-only"><span
+                                            class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Muscle
+                                            Relaxation (근육 이완)</span></label>
+                                    <label class="cursor-pointer check-pill"><input type="checkbox" name="ptResponse"
+                                            value="ADL Improvement (일상생활동작 향상)" class="peer sr-only"><span
+                                            class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">ADL
+                                            Improvement (일상생활동작 향상)</span></label>
+                                    <label class="cursor-pointer check-pill"><input type="checkbox" name="ptResponse"
+                                            value="Pain Reduction (통증 감소)" class="peer sr-only"><span
+                                            class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Pain
+                                            Reduction (통증 감소)</span></label>
+                                    <label class="cursor-pointer check-pill"><input type="checkbox" name="ptResponse"
+                                            value="Strength Gain (근력 향상)" class="peer sr-only"><span
+                                            class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Strength
+                                            Gain (근력 향상)</span></label>
+                                    <label class="cursor-pointer check-pill"><input type="checkbox" name="ptResponse"
+                                            value="Core Stability (코어 안정성)" class="peer sr-only"><span
+                                            class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Core
+                                            Stability (코어 안정성)</span></label>
+                                    <label class="cursor-pointer check-pill"><input type="checkbox" name="ptResponse"
+                                            value="Postural Alignment (자세 정렬 개선)" class="peer sr-only"><span
+                                            class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Postural
+                                            Alignment (자세 정렬 개선)</span></label>
+                                    <label class="cursor-pointer check-pill"><input type="checkbox" name="ptResponse"
+                                            value="Gait Pattern Correction (보행 패턴 교정)" class="peer sr-only"><span
+                                            class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Gait
+                                            Pattern Correction (보행 패턴 교정)</span></label>
+                                    <label class="cursor-pointer check-pill"><input type="checkbox" name="ptResponse"
+                                            value="Functional Task Performance (기능적 과제 수행력 향상)"
+                                            class="peer sr-only"><span
+                                            class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Functional
+                                            Task Performance (기능적 과제 수행력 향상)</span></label>
+                                    <label class="cursor-pointer check-pill"><input type="checkbox" name="ptResponse"
+                                            value="Endurance Improvement (지구력 향상)" class="peer sr-only"><span
+                                            class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Endurance
+                                            Improvement (지구력 향상)</span></label>
+                                    <label class="cursor-pointer check-pill"><input type="checkbox" name="ptResponse"
+                                            value="Neuromuscular re-education(신경근 재교육)" class="peer sr-only"><span
+                                            class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Neuromuscular
+                                            re-education(신경근 재교육)</span></label>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                <div class="flex justify-between items-end mb-2">
+                                    <label class="form-label mb-0">Response VAS</label>
+                                    <span class="text-brand-green font-bold text-lg" id="responseVasDisplay">7/10</span>
+                                </div>
+                                <input type="range" id="f_responseVas" name="responseVas" min="0" max="10" value="7">
+                                <div class="flex justify-between text-xs text-gray-400 mt-2 font-medium px-1">
+                                    <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                class="form-label text-sm font-bold text-gray-900 border-b border-gray-100 pb-3 mb-4">3.
+                                Follow-up Plan</label>
+                            <textarea id="f_followUp" class="form-textarea h-24"
+                                placeholder="예: 지속적인 근력운동 유지"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </form>
+
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const regionData = {
+                cervical: {
+                    label: "Cervical",
+                    romStyle: 'inputs',
+                    romInputs: [
+                        { name: 'Flexion', norm: '50' },
+                        { name: 'Extension', norm: '55' },
+                        { name: 'Lat. Bending', norm: '60' },
+                        { name: 'Rotation', norm: '75' }
+                    ],
+                    mmtItems: ['Flexion', 'Extension', 'Lat. Bending', 'Rotation'],
+                    spList: ['Spurling', 'Distraction']
+                },
+                lumbar: {
+                    label: "Lumbar",
+                    romStyle: 'inputs',
+                    romInputs: [
+                        { name: 'Rotation', norm: '30' },
+                        { name: 'Flexion', norm: '90' },
+                        { name: 'Extension', norm: '30' },
+                        { name: 'Lat. Bending', norm: '35' }
+                    ],
+                    mmtItems: ['Flexion', 'Extension', 'Lat. Bending', 'Rotation'],
+                    spList: ['SLR', 'Slump test']
+                },
+                shoulder: {
+                    label: "Shoulder",
+                    romStyle: 'inputs',
+                    romInputs: [
+                        { name: 'Extension', norm: '60' },
+                        { name: 'Abduction', norm: '180' },
+                        { name: 'Hori. abd.', norm: '45' },
+                        { name: 'Hori. add.', norm: '120' },
+                        { name: 'In./ext.Rot.', norm: '90' }
+                    ],
+                    mmtItems: ['Flexion', 'Extension', 'Abduction', 'Hori. abd.', 'Hori. add.', 'In./ext.Rot.'],
+                    spList: ['Neer', 'Hawkins', 'Empty can']
+                },
+                hip: {
+                    label: "Hip",
+                    romStyle: 'inputs',
+                    romInputs: [
+                        { name: 'Flexion', norm: '140' },
+                        { name: 'Extension', norm: '15' },
+                        { name: 'Abduction', norm: '45' },
+                        { name: 'Adduction', norm: '25' },
+                        { name: 'In.Rot.', norm: '25' },
+                        { name: 'Ext. Rot.', norm: '45' }
+                    ],
+                    mmtItems: ['Flexion', 'Extension', 'Abduction', 'Adduction', 'In.Rot.', 'Ext. Rot.'],
+                    spList: ['FABER', 'Thomas test']
+                },
+                knee: {
+                    label: "Knee",
+                    romStyle: 'inputs',
+                    romInputs: [
+                        { name: 'Flexion', norm: '130' },
+                        { name: 'Extension', norm: '0' }
+                    ],
+                    mmtItems: ['Flexion', 'Extension'],
+                    spList: ['Lachman', 'McMurray']
+                },
+                ankle: {
+                    label: "Ankle",
+                    romStyle: 'inputs',
+                    romInputs: [
+                        { name: 'Flexion', norm: '20' },
+                        { name: 'Extension', norm: '45' },
+                        { name: 'Inversion', norm: '30' },
+                        { name: 'Eversion', norm: '25' }
+                    ],
+                    mmtItems: ['Flexion', 'Extension', 'Inversion', 'Eversion'],
+                    spList: ['Anterior drawer']
+                },
+                elbow: {
+                    label: "Elbow",
+                    romStyle: 'inputs',
+                    romInputs: [
+                        { name: 'Elbow - Flexion', norm: '145' },
+                        { name: 'Elbow - Extension', norm: '0' },
+                        { name: 'Wrist - Flexion', norm: '80' }
+                    ],
+                    mmtItems: ['Flexion', 'Extension'],
+                    spList: ['Cozen', 'Golfer\'s elbow']
+                },
+                wrist: {
+                    label: "Wrist",
+                    romStyle: 'inputs',
+                    romInputs: [
+                        { name: 'Extension', norm: '75' },
+                        { name: 'Radial dev.', norm: '25' },
+                        { name: 'Ulnar dev.', norm: '35' }
+                    ],
+                    mmtItems: ['Flexion', 'Extension', 'Radial dev.', 'Ulnar dev.'],
+                    spList: ['Phalen', 'Tinel']
+                }
+            };
+
+            const regionSelector = document.getElementById('regionSelector');
+            Object.keys(regionData).forEach(key => {
+                const label = regionData[key].label;
+                const html = `
+                    <label class="cursor-pointer check-pill">
+                        <input type="checkbox" name="selectedRegions" value="${key}" class="peer sr-only">
+                        <span class="block px-4 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">${label}</span>
+                    </label>
+                `;
+                regionSelector.insertAdjacentHTML('beforeend', html);
+            });
+
+            const regionCheckboxes = document.querySelectorAll('input[name="selectedRegions"]');
+            const regionCountText = document.getElementById('regionCountText');
+            const dynamicContainer = document.getElementById('dynamicRegionsContainer');
+
+            regionCheckboxes.forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    const checkedList = Array.from(regionCheckboxes).filter(c => c.checked);
+                    if (checkedList.length > 2) {
+                        e.target.checked = false;
+                        alert("치료 부위는 최대 2개까지만 선택 가능합니다.");
+                        return;
+                    }
+                    regionCountText.textContent = `${checkedList.length}개 선택됨`;
+                    renderDynamicRegions(checkedList.map(c => c.value));
+                });
+            });
+
+            function renderDynamicRegions(selectedKeys) {
+                if (selectedKeys.length === 0) {
+                    dynamicContainer.innerHTML = `<p class="text-sm text-gray-400 text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">위의 '치료 부위'를 선택하시면 해당 부위의 ROM, MMT, Special Test 항목이 여기에 나타납니다.</p>`;
+                    return;
+                }
+
+                dynamicContainer.innerHTML = '';
+                selectedKeys.forEach(id => {
+                    const r = regionData[id];
+
+                    // ROM Section
+                    let romHtml = `
+                        <div class="mb-4 bg-gray-50 rounded-lg p-4 border border-gray-100">
+                            <div class="grid grid-cols-3 gap-4 mb-3 pb-2 border-b border-gray-200">
+                                <div class="text-xs font-bold text-gray-500 uppercase tracking-wider">Movement</div>
+                                <div class="text-xs font-bold text-gray-500 uppercase tracking-wider text-center">AROM</div>
+                                <div class="text-xs font-bold text-gray-500 uppercase tracking-wider text-center">PROM</div>
+                            </div>
+                            ${r.romInputs.map(item => {
+                        const idBase = `${id}_${item.name.replace(/[^a-zA-Z]/g, '')}`;
+                        const normVal = parseInt(item.norm, 10);
+                        const defaultVal = Math.round((normVal * 2 / 3) / 5) * 5;
+                        return `
+                                <div class="grid grid-cols-3 gap-4 items-center mb-3 last:mb-0">
+                                    <div class="text-sm font-medium text-gray-700">${item.name}</div>
+                                    <div class="flex items-center justify-center gap-1">
+                                        <input id="f_arom_${idBase}" type="text" class="form-input w-16 px-1 py-1 text-center text-sm font-semibold text-brand-green bg-white shadow-sm" value="${defaultVal}">
+                                        <span class="text-xs font-medium text-gray-400">/ ${item.norm}º</span>
+                                    </div>
+                                    <div class="flex items-center justify-center gap-1">
+                                        <input id="f_prom_${idBase}" type="text" class="form-input w-16 px-1 py-1 text-center text-sm font-semibold text-brand-green bg-white shadow-sm" value="${defaultVal}">
+                                        <span class="text-xs font-medium text-gray-400">/ ${item.norm}º</span>
+                                    </div>
+                                </div>`;
+                    }).join('')}
+                        </div>
+                    `;
+
+                    // MMT Section
+                    let mmtHtml = `
+                        <div class="mb-4 bg-gray-50 rounded-lg p-4 border border-gray-100">
+                            <div class="grid grid-cols-12 gap-4 mb-3 pb-2 border-b border-gray-200">
+                                <div class="col-span-4 text-xs font-bold text-gray-500 uppercase tracking-wider">Movement</div>
+                                <div class="col-span-8 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">Grade (0-5)</div>
+                            </div>
+                            ${r.mmtItems.map(item => {
+                        const idBase = `${id}_${item.replace(/[^a-zA-Z]/g, '')}`;
+                        return `
+                                <div class="grid grid-cols-12 gap-4 items-center mb-3 last:mb-0">
+                                    <div class="col-span-4 text-sm font-medium text-gray-700">${item}</div>
+                                    <div class="col-span-8 flex justify-center gap-1 flex-wrap">
+                                        <label class="cursor-pointer check-pill"><input type="radio" name="mmtGrade_${idBase}" value="5/5" class="peer sr-only"><span class="block w-8 h-8 leading-8 text-center rounded-lg border border-gray-200 text-xs font-bold text-gray-600 transition-colors">5</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="radio" name="mmtGrade_${idBase}" value="4/5" class="peer sr-only"><span class="block w-8 h-8 leading-8 text-center rounded-lg border border-gray-200 text-xs font-bold text-gray-600 transition-colors">4</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="radio" name="mmtGrade_${idBase}" value="3/5" class="peer sr-only" checked><span class="block w-8 h-8 leading-8 text-center rounded-lg border border-gray-200 text-xs font-bold text-gray-600 transition-colors">3</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="radio" name="mmtGrade_${idBase}" value="2/5" class="peer sr-only"><span class="block w-8 h-8 leading-8 text-center rounded-lg border border-gray-200 text-xs font-bold text-gray-600 transition-colors">2</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="radio" name="mmtGrade_${idBase}" value="1/5" class="peer sr-only"><span class="block w-8 h-8 leading-8 text-center rounded-lg border border-gray-200 text-xs font-bold text-gray-600 transition-colors">1</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="radio" name="mmtGrade_${idBase}" value="0/5" class="peer sr-only"><span class="block w-8 h-8 leading-8 text-center rounded-lg border border-gray-200 text-xs font-bold text-gray-600 transition-colors">0</span></label>
+                                    </div>
+                                </div>`;
+                    }).join('')}
+                        </div>
+                    `;
+
+                    // Special Tests Section
+                    let spHtml = `
+                        <div class="mb-4 bg-gray-50 rounded-lg p-4 border border-gray-100">
+                            <div class="grid grid-cols-12 gap-4 mb-3 pb-2 border-b border-gray-200">
+                                <div class="col-span-4 text-xs font-bold text-gray-500 uppercase tracking-wider">항목</div>
+                                <div class="col-span-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">양성(+) / 음성(-)</div>
+                                <div class="col-span-4 text-xs font-bold text-gray-500 uppercase tracking-wider">특이사항</div>
+                            </div>
+                            ${r.spList.map(sp => {
+                        const idBase = `${id}_${sp.replace(/[^a-zA-Z]/g, '')}`;
+                        return `
+                                <div class="grid grid-cols-12 gap-4 items-center mb-3 last:mb-0">
+                                    <div class="col-span-4 text-sm font-medium text-gray-700 break-words">${sp}</div>
+                                    <div class="col-span-4 flex justify-center gap-2">
+                                        <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}" value="(+)" class="peer sr-only"><span class="block px-3 py-1 rounded-full border border-gray-200 text-xs font-bold text-gray-600 transition-colors">양성 (+)</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}" value="(-)" class="peer sr-only" checked><span class="block px-3 py-1 rounded-full border border-gray-200 text-xs font-bold text-gray-600 transition-colors">음성 (-)</span></label>
+                                    </div>
+                                    <div class="col-span-4">
+                                        <input id="f_spNote_${idBase}" type="text" class="form-input text-xs px-2 py-1.5 h-[34px]" placeholder="특이사항 입력">
+                                    </div>
+                                </div>`;
+                    }).join('')}
+                        </div>
+                    `;
+
+                    const html = `
+                        <div class="p-6 bg-white rounded-xl border-2 border-brand-green/20 relative shadow-sm">
+                            <h3 class="text-md font-bold text-brand-green mb-6 pb-2 border-b border-brand-green/20">[${r.label}] 세부 검사</h3>
+                            
+                            <div class="mb-8">
+                                <h4 class="text-sm font-semibold text-gray-900 mb-4">3. 관절가동범위 (ROM)</h4>
+                                ${romHtml}
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+                                    <div>
+                                        <label class="form-label">Limitation</label>
+                                        <div class="flex gap-2">
+                                            <label class="cursor-pointer check-pill"><input type="radio" name="romLimit_${id}" value="있음" class="peer sr-only" checked><span class="block px-4 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">있음</span></label>
+                                            <label class="cursor-pointer check-pill"><input type="radio" name="romLimit_${id}" value="없음" class="peer sr-only"><span class="block px-4 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">없음</span></label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">원인</label>
+                                        <input id="f_romCause_${id}" type="text" class="form-input" placeholder="예: 통증으로 인한 ROM 제한" value="">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-8">
+                                <h4 class="text-sm font-semibold text-gray-900 mb-4">4. 근력검사 (MMT)</h4>
+                                ${mmtHtml}
+                            </div>
+
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-900 mb-4">5. Special tests</h4>
+                                ${spHtml}
+                            </div>
+                        </div>
+                    `;
+                    dynamicContainer.insertAdjacentHTML('beforeend', html);
+                });
+
+                // Limitation 없음을 눌렀을 때 원인 적을 수 없게 만들기
+                selectedKeys.forEach(id => {
+                    const limitRadios = document.querySelectorAll(`input[name="romLimit_${id}"]`);
+                    const causeInput = document.getElementById(`f_romCause_${id}`);
+                    limitRadios.forEach(radio => {
+                        radio.addEventListener('change', (e) => {
+                            if (e.target.value === '없음') {
+                                causeInput.disabled = true;
+                                causeInput.classList.add('bg-gray-100', 'cursor-not-allowed', 'opacity-50');
+                                causeInput.value = '';
+                            } else {
+                                causeInput.disabled = false;
+                                causeInput.classList.remove('bg-gray-100', 'cursor-not-allowed', 'opacity-50');
+                            }
+                        });
+                    });
+                });
+            }
+
+            const startSelect = document.getElementById('f_startTime');
+            const endSelect = document.getElementById('f_endTime');
+
+            function generateTimeOptions(startHour, startMin, endHour, endMin) {
+                const options = [];
+                let h = startHour; let m = startMin;
+                while (h < endHour || (h === endHour && m <= endMin)) {
+                    const hh = h.toString().padStart(2, '0');
+                    const mm = m.toString().padStart(2, '0');
+                    options.push(`${hh}:${mm}`);
+                    m += 5; if (m >= 60) { m = 0; h++; }
+                }
+                return options;
+            }
+
+            const startTimes = generateTimeOptions(9, 0, 17, 30);
+            startTimes.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t; opt.textContent = t;
+                if (t === "10:00") opt.selected = true;
+                startSelect.appendChild(opt);
+            });
+
+            const endTimes = generateTimeOptions(9, 30, 18, 0);
+            endTimes.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t; opt.textContent = t;
+                if (t === "10:30") opt.selected = true;
+                endSelect.appendChild(opt);
+            });
+
+            const totalTimeDisplay = document.getElementById('f_totalTime');
+            function calculateTotalTime() {
+                const s = startSelect.value;
+                const e = endSelect.value;
+                if (!s || !e) return;
+
+                const [sh, sm] = s.split(':').map(Number);
+                const [eh, em] = e.split(':').map(Number);
+
+                let diff = (eh * 60 + em) - (sh * 60 + sm);
+                if (diff < 0) {
+                    totalTimeDisplay.textContent = "오류 (시간 재설정)";
+                    totalTimeDisplay.classList.add('text-red-500');
+                } else {
+                    totalTimeDisplay.textContent = `${diff}분`;
+                    totalTimeDisplay.classList.remove('text-red-500');
+                }
+            }
+
+            startSelect.addEventListener('change', calculateTotalTime);
+            endSelect.addEventListener('change', calculateTotalTime);
+            calculateTotalTime();
+
+            const vasSlider = document.getElementById('f_vasScore');
+            const vasDisplay = document.getElementById('vasDisplay');
+            vasSlider.addEventListener('input', (e) => { vasDisplay.textContent = `${e.target.value}/10`; });
+
+            const resVasSlider = document.getElementById('f_responseVas');
+            const resVasDisplay = document.getElementById('responseVasDisplay');
+            resVasSlider.addEventListener('input', (e) => { resVasDisplay.textContent = `${e.target.value}/10`; });
+
+            const swellingRadios = document.querySelectorAll('input[name="swelling"]');
+            const swellingLocContainer = document.getElementById('swellingLocContainer');
+
+            swellingRadios.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    if (e.target.value === '없음') {
+                        swellingLocContainer.classList.add('hidden');
+                    } else {
+                        swellingLocContainer.classList.remove('hidden');
+                    }
+                });
+            });
+
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('border-gray-200'); navbar.classList.remove('border-transparent');
+                } else {
+                    navbar.classList.remove('border-gray-200'); navbar.classList.add('border-transparent');
+                }
+            });
+
+            const sections = document.querySelectorAll('.scroll-section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const observerOptions = { root: null, rootMargin: '-20% 0px -80% 0px', threshold: 0 };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => link.classList.remove('active'));
+                        const id = entry.target.getAttribute('id');
+                        const activeLink = document.querySelector(`.nav-link[href="#${id}"]`);
+                        if (activeLink) activeLink.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => observer.observe(section));
+            if (window.scrollY < 100 && navLinks.length > 0) navLinks[0].classList.add('active');
+
+            // --- Multiple Selection Support Helper ---
+            const getVal = (idOrName) => {
+                const el = document.getElementById(idOrName);
+                if (el) { return el.value; }
+                const checked = document.querySelectorAll(`input[name="${idOrName}"]:checked`);
+                if (checked.length > 0) {
+                    return Array.from(checked).map(c => c.value).join(', ');
+                }
+                return "";
+            };
+
+            // --- Reset Button Logic ---
+            document.getElementById('resetBtn').addEventListener('click', () => {
+                if (confirm("모든 챠팅 내용이 초기화됩니다. 계속하시겠습니까?")) {
+                    document.getElementById('chartForm').reset();
+
+                    // Reset custom displays
+                    document.getElementById('vasDisplay').textContent = document.getElementById('f_vasScore').defaultValue + "/10";
+                    document.getElementById('responseVasDisplay').textContent = document.getElementById('f_responseVas').defaultValue + "/10";
+                    document.getElementById('swellingLocContainer').classList.remove('hidden');
+
+                    // Clear dynamic regions
+                    document.getElementById('dynamicRegionsContainer').innerHTML = `<p class="text-sm text-gray-400 text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">위의 '치료 부위'를 선택하시면 해당 부위의 ROM, MMT, Special Test 항목이 여기에 나타납니다.</p>`;
+                    document.getElementById('regionCountText').textContent = "0개 선택됨";
+                }
+            });
+
+            const copyBtn = document.getElementById('copyBtn');
+            copyBtn.addEventListener('click', () => {
+
+                const swellingVal = getVal('swelling');
+                const swellingText = swellingVal === '없음' ? '없음' : `있음 (부위: ${getVal('f_swellingLoc')})`;
+                const painChangeVal = getVal('painChange');
+
+                const checkedRegions = Array.from(document.querySelectorAll('input[name="selectedRegions"]:checked')).map(c => c.value);
+                let dynamicReportText = "";
+
+                if (checkedRegions.length === 0) {
+                    dynamicReportText = "\n[치료 부위 미선택]\n";
+                } else {
+                    checkedRegions.forEach(id => {
+                        const r = regionData[id];
+                        let romText = "";
+
+                        let limitVal = getVal(`romLimit_${id}`);
+                        let causeVal = getVal(`f_romCause_${id}`);
+                        let limitText = limitVal === '없음' ? '없음' : `있음 (원인: ${causeVal})`;
+
+                        let inputTexts = r.romInputs.map(item => {
+                            const idBase = `${id}_${item.name.replace(/[^a-zA-Z]/g, '')}`;
+                            const arom = getVal(`f_arom_${idBase}`);
+                            const prom = getVal(`f_prom_${idBase}`);
+                            return `   - ${item.name}: AROM ${arom}/${item.norm}º, PROM ${prom}/${item.norm}º`;
+                        }).join('\n');
+                        romText = `\n${inputTexts}\n - Limitation: ${limitText}`;
+
+                        let mmtText = `\n4. MMT:`;
+                        r.mmtItems.forEach(item => {
+                            const idBase = `${id}_${item.replace(/[^a-zA-Z]/g, '')}`;
+                            mmtText += `\n   - ${item}: Grade ${getVal(`mmtGrade_${idBase}`)}`;
+                        });
+
+                        let spText = `\n5. Special tests:`;
+                        r.spList.forEach(sp => {
+                            const idBase = `${id}_${sp.replace(/[^a-zA-Z]/g, '')}`;
+                            const res = getVal(`spRes_${idBase}`);
+                            const note = getVal(`f_spNote_${idBase}`);
+                            const noteText = note ? ` (${note})` : '';
+                            spText += `\n   - ${sp}: ${res}${noteText}`;
+                        });
+
+                        dynamicReportText += `
+[${r.label} 세부 검사]
+3. ROM: ${romText}${mmtText}${spText}
+`;
+                    });
+                }
+
+                const report =
+                    `[치료 시간] ${getVal('f_startTime')} - ${getVal('f_endTime')} (총 치료 시간: ${document.getElementById('f_totalTime').textContent})
+
+S) Subjective
+1. C/C (주호소): ${getVal('f_cc')}
+2. 통증 변화 기록: ${painChangeVal}
+3. Pain intensity (VAS): VAS ${getVal('f_vasScore')}/10, ${getVal('painFreq')}
+
+O) Objective
+1. 부종: ${swellingText}
+2. 통증: ${getVal('painPattern')} (Pain-provoking activity: ${getVal('f_painProvoking')})
+${dynamicReportText}
+6. 자세 & 보행: Posture: ${getVal('posture')}, Gait: ${getVal('gait')}
+
+A) Assessment
+- Goal: ${getVal('goal')}
+
+P) Plan
+1. Techniques Used:
+ - 수동 중재: ${getVal('techPassive')}
+ - 적용 부위: ${getVal('techArea')}
+ - 능동 중재: ${getVal('techActive')}
+2. Patient Response: ${getVal('ptResponse')} (VAS ${getVal('f_responseVas')}/10)
+3. Follow-up Plan: ${getVal('f_followUp')}
+`;
+
+                navigator.clipboard.writeText(report).then(() => {
+                    const originalHTML = copyBtn.innerHTML;
+                    copyBtn.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        복사 완료!
+                    `;
+                    copyBtn.classList.remove('bg-brand-green', 'hover:bg-brand-greenHover');
+                    copyBtn.classList.add('bg-black', 'hover:bg-gray-800');
+
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalHTML;
+                        copyBtn.classList.remove('bg-black', 'hover:bg-gray-800');
+                        copyBtn.classList.add('bg-brand-green', 'hover:bg-brand-greenHover');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    alert("클립보드 복사에 실패했습니다.");
+                });
+            });
+
+            // --- Paste Chart Logic ---
+            const openPasteBtn = document.getElementById('openPasteBtn');
+            const closePasteModal = document.getElementById('closePasteModal');
+            const cancelPasteBtn = document.getElementById('cancelPasteBtn');
+            const applyPasteBtn = document.getElementById('applyPasteBtn');
+            const pasteModal = document.getElementById('pasteModal');
+            const pasteTextarea = document.getElementById('pasteTextarea');
+
+            const toggleModal = (show) => {
+                if (show) {
+                    pasteModal.classList.remove('hidden');
+                    pasteTextarea.value = '';
+                    setTimeout(() => pasteTextarea.focus(), 100);
+                } else {
+                    pasteModal.classList.add('hidden');
+                }
+            };
+
+            openPasteBtn.addEventListener('click', () => toggleModal(true));
+            closePasteModal.addEventListener('click', () => toggleModal(false));
+            cancelPasteBtn.addEventListener('click', () => toggleModal(false));
+
+            function checkRadios(name, value) {
+                if (!value) return;
+                const radios = document.querySelectorAll(`input[name="${name}"]`);
+                radios.forEach(r => r.checked = false);
+                const valTrimmed = value.trim();
+                for (let r of radios) {
+                    if (r.value === valTrimmed || r.value.includes(valTrimmed)) {
+                        r.checked = true;
+                        // trigger change to update dependent UI
+                        r.dispatchEvent(new Event('change'));
+                        return;
+                    }
+                }
+            }
+
+            function checkCheckboxes(name, valuesStr) {
+                if (!valuesStr) return;
+                const values = valuesStr.split(',').map(s => s.trim()).filter(s => s);
+                const cbs = document.querySelectorAll(`input[name="${name}"]`);
+                cbs.forEach(cb => cb.checked = false);
+                cbs.forEach(cb => {
+                    // Match partial for complex labels or exact match
+                    if (values.some(v => cb.value.includes(v) || v.includes(cb.value))) {
+                        cb.checked = true;
+                    }
+                });
+            }
+
+            applyPasteBtn.addEventListener('click', () => {
+                const text = pasteTextarea.value;
+                if (!text.trim()) { alert('텍스트를 입력해주세요.'); return; }
+
+                try {
+                    const extract = (regex, defaultVal = '') => {
+                        const match = text.match(regex);
+                        return match ? match[1].trim() : defaultVal;
+                    };
+
+                    const timeMatch = text.match(/\[치료 시간\] (\d{2}:\d{2}) - (\d{2}:\d{2})/);
+                    if (timeMatch) {
+                        const setValSafe = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+                        setValSafe('f_startTime', timeMatch[1]);
+                        setValSafe('f_endTime', timeMatch[2]);
+                        calculateTotalTime();
+                    }
+
+                    const ccEl = document.getElementById('f_cc');
+                    if (ccEl) ccEl.value = extract(/1\. C\/C \(주호소\):\s*(.*)/);
+
+                    checkRadios('painChange', extract(/2\. 통증 변화 기록:\s*(.*)/));
+
+                    const vasMatch = text.match(/3\. Pain intensity \(VAS\): VAS (\d+)\/10,\s*(.*)/);
+                    if (vasMatch) {
+                        document.getElementById('f_vasScore').value = vasMatch[1];
+                        document.getElementById('vasDisplay').textContent = vasMatch[1] + '/10';
+                        checkCheckboxes('painFreq', vasMatch[2]);
+                    }
+
+                    const swellingMatch = text.match(/1\. 부종:\s*(.*)/);
+                    if (swellingMatch) {
+                        const swText = swellingMatch[1];
+                        if (swText.includes('있음')) {
+                            checkRadios('swelling', '있음');
+                            const locMatch = swText.match(/부위:\s*(.*?)\)/);
+                            if (locMatch) {
+                                const el = document.getElementById('f_swellingLoc');
+                                if (el) el.value = locMatch[1];
+                            }
+                        } else {
+                            checkRadios('swelling', '없음');
+                        }
+                    }
+
+                    const painMatch = text.match(/2\. 통증:\s*(.*?)\s*\(Pain-provoking activity:\s*(.*?)\)/);
+                    if (painMatch) {
+                        checkCheckboxes('painPattern', painMatch[1]);
+                        const el = document.getElementById('f_painProvoking');
+                        if (el) el.value = painMatch[2];
+                    }
+
+                    const regionMatches = [...text.matchAll(/\[(.*?) 세부 검사\]/g)];
+                    const selectedRegionKeys = [];
+                    const labelToKey = {};
+                    Object.keys(regionData).forEach(k => labelToKey[regionData[k].label] = k);
+
+                    regionMatches.forEach(match => {
+                        const key = labelToKey[match[1]];
+                        if (key) selectedRegionKeys.push(key);
+                    });
+
+                    document.querySelectorAll('input[name="selectedRegions"]').forEach(cb => {
+                        cb.checked = selectedRegionKeys.includes(cb.value);
+                    });
+                    document.getElementById('regionCountText').textContent = `${selectedRegionKeys.length}개 선택됨`;
+                    renderDynamicRegions(selectedRegionKeys);
+
+                    selectedRegionKeys.forEach(key => {
+                        const r = regionData[key];
+                        const rRegex = new RegExp(`\\[${r.label} 세부 검사\\]([\\s\\S]*?)(?=\\[.* 세부 검사\\]|6\\. 자세 & 보행|A\\) Assessment|$)`);
+                        const rMatch = text.match(rRegex);
+                        if (!rMatch) return;
+                        const rText = rMatch[1];
+
+                        const limitMatch = rText.match(/-\s*Limitation:\s*(.*?)(?:\s*\((?:원인:\s*)?(.*?)\))?$/m);
+                        if (limitMatch) {
+                            const hasLimit = limitMatch[1].includes('있음');
+                            checkRadios(`romLimit_${key}`, hasLimit ? '있음' : '없음');
+                            const causeInput = document.getElementById(`f_romCause_${key}`);
+                            if (causeInput && hasLimit && limitMatch[2]) {
+                                causeInput.value = limitMatch[2].trim();
+                            }
+                        }
+
+                        r.romInputs.forEach(item => {
+                            const idBase = `${key}_${item.name.replace(/[^a-zA-Z]/g, '')}`;
+                            const escapedName = item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                            const itemRegex = new RegExp(`-\\s*${escapedName}:\\s*AROM\\s*(\\d+)/\\d+º,\\s*PROM\\s*(\\d+)/\\d+º`);
+                            const iMatch = rText.match(itemRegex);
+                            if (iMatch) {
+                                const elArom = document.getElementById(`f_arom_${idBase}`);
+                                const elProm = document.getElementById(`f_prom_${idBase}`);
+                                if (elArom) elArom.value = iMatch[1];
+                                if (elProm) elProm.value = iMatch[2];
+                            }
+                        });
+
+                        r.mmtItems.forEach(item => {
+                            const idBase = `${key}_${item.replace(/[^a-zA-Z]/g, '')}`;
+                            const escapedName = item.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                            const itemRegex = new RegExp(`-\\s*${escapedName}:\\s*Grade\\s*(\\d)\\/5`);
+                            const iMatch = rText.match(itemRegex);
+                            if (iMatch) {
+                                checkRadios(`mmtGrade_${idBase}`, `${iMatch[1]}/5`);
+                            }
+                        });
+
+                        r.spList.forEach(sp => {
+                            const idBase = `${key}_${sp.replace(/[^a-zA-Z]/g, '')}`;
+                            const escapedName = sp.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                            const itemRegex = new RegExp(`-\\s*${escapedName}:\\s*(\\(\\+\\)|\\(-\\))(?:\\s*\\((.*?)\\))?`);
+                            const iMatch = rText.match(itemRegex);
+                            if (iMatch) {
+                                checkRadios(`spRes_${idBase}`, iMatch[1]);
+                                if (iMatch[2]) {
+                                    const noteEl = document.getElementById(`f_spNote_${idBase}`);
+                                    if (noteEl) noteEl.value = iMatch[2].trim();
+                                }
+                            }
+                        });
+                    });
+
+                    const postureGaitMatch = text.match(/6\. 자세 & 보행:\s*Posture:\s*(.*?),\s*Gait:\s*(.*)/);
+                    if (postureGaitMatch) {
+                        checkCheckboxes('posture', postureGaitMatch[1]);
+                        checkCheckboxes('gait', postureGaitMatch[2]);
+                    }
+
+                    const goalMatch = text.match(/-\s*Goal:\s*(.*)/);
+                    if (goalMatch) checkCheckboxes('goal', goalMatch[1]);
+
+                    const passiveMatch = text.match(/-\s*수동 중재:\s*(.*)/);
+                    if (passiveMatch) checkCheckboxes('techPassive', passiveMatch[1]);
+
+                    const areaMatch = text.match(/-\s*적용 부위:\s*(.*)/);
+                    if (areaMatch) checkCheckboxes('techArea', areaMatch[1]);
+
+                    const activeMatch = text.match(/-\s*능동 중재:\s*(.*)/);
+                    if (activeMatch) checkCheckboxes('techActive', activeMatch[1]);
+
+                    const ptResMatch = text.match(/2\. Patient Response:\s*(.*?)\s*\(VAS\s*(\d+)\/10\)/);
+                    if (ptResMatch) {
+                        checkCheckboxes('ptResponse', ptResMatch[1]);
+                        const rvas = document.getElementById('f_responseVas');
+                        if (rvas) rvas.value = ptResMatch[2];
+                        const rvasD = document.getElementById('responseVasDisplay');
+                        if (rvasD) rvasD.textContent = ptResMatch[2] + '/10';
+                    }
+
+                    const fwMatch = text.match(/3\. Follow-up Plan:\s*(.*)/);
+                    if (fwMatch) {
+                        const fw = document.getElementById('f_followUp');
+                        if (fw) fw.value = fwMatch[1];
+                    }
+
+                    toggleModal(false);
+                } catch (e) {
+                    console.error(e);
+                    alert('파싱 중 오류가 발생했습니다. 양식을 확인해주세요.');
+                }
+            });
+        });
+    </script>
+
+    <!-- Paste Modal -->
+    <div id="pasteModal"
+        class="fixed inset-0 z-[100] hidden bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 class="text-lg font-bold text-gray-900">이전 챠트 불러오기 (붙여넣기)</h3>
+                <button type="button" id="closePasteModal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6 flex-1 overflow-y-auto">
+                <p class="text-sm text-gray-500 mb-4">복사했던 챠팅 텍스트를 아래에 붙여넣기 한 뒤, '불러오기 적용' 버튼을 누르세요. 형식은 앱에서 '복사하기' 된
+                    포맷과 동일해야 합니다.</p>
+                <textarea id="pasteTextarea"
+                    class="form-textarea w-full h-[50vh] text-xs font-mono whitespace-pre bg-gray-50 border-gray-200"
+                    placeholder="[치료 시간] 10:00 - 10:30..."></textarea>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 flex justify-end gap-3 bg-gray-50">
+                <button type="button" id="cancelPasteBtn"
+                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">취소</button>
+                <button type="button" id="applyPasteBtn"
+                    class="px-5 py-2 text-sm font-medium text-white bg-brand-green rounded-lg hover:bg-brand-greenHover transition-colors shadow-sm">불러오기
+                    적용</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
