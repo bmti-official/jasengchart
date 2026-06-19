@@ -188,11 +188,11 @@
     <nav class="fixed top-0 left-0 w-full z-50 bg-brand-bg/90 backdrop-blur-md px-6 py-4 flex justify-between items-center transition-all duration-300 border-b border-transparent"
         id="navbar">
         <div class="flex items-center space-x-4 sm:space-x-8 overflow-x-auto whitespace-nowrap flex-1 mr-4 hide-scroll">
-            <a href="#section-session" class="nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">📄 도수치료 챠트 입력 TherapyChart</a>
-            <a href="#section-subjective" class="nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">S) Subjective</a>
-            <a href="#section-objective" class="nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">O) Objective</a>
-            <a href="#section-assessment" class="nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">A) Assessment</a>
-            <a href="#section-plan" class="nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">P) Plan</a>
+            <a href="#section-session" class="nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">도수치료 챠트</a>
+            <a href="#section-subjective" class="nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">S</a>
+            <a href="#section-objective" class="nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">O</a>
+            <a href="#section-assessment" class="nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">A</a>
+            <a href="#section-plan" class="nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">P</a>
         </div>
 
         <div class="flex items-center justify-end space-x-2 shrink-0">
@@ -284,10 +284,10 @@
                             <label class="form-label">2. 통증 변화 기록</label>
                             <div class="flex flex-wrap gap-2">
                                 <label class="cursor-pointer check-pill">
-                                    <input type="radio" name="painChange" value="첫 회차 (생략)" class="peer sr-only" checked>
+                                    <input type="radio" name="painChange" value="첫 회차" class="peer sr-only" checked>
                                     <span
                                         class="block px-4 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition-colors">첫
-                                        회차 (생략)</span>
+                                        회차</span>
                                 </label>
                                 <label class="cursor-pointer check-pill">
                                     <input type="radio" name="painChange" value="증가" class="peer sr-only">
@@ -641,22 +641,22 @@
                                         <label class="cursor-pointer check-pill"><input type="checkbox"
                                                 name="techPassive" value="breathing cueing" class="peer sr-only"><span
                                                 class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">breathing
-                                                cueing</span></label>
+                                                cueing <span class="text-[11px] text-gray-400 font-normal ml-0.5">(호흡 유도)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox"
                                                 name="techPassive" value="Manual Therapy" class="peer sr-only"><span
                                                 class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Manual
-                                                Therapy</span></label>
+                                                Therapy <span class="text-[11px] text-gray-400 font-normal ml-0.5">(도수 치료)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox"
                                                 name="techPassive" value="scapular setting" class="peer sr-only"><span
                                                 class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">scapular
-                                                setting</span></label>
+                                                setting <span class="text-[11px] text-gray-400 font-normal ml-0.5">(견갑골 안정화)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox"
                                                 name="techPassive" value="Education" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Education</span></label>
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Education <span class="text-[11px] text-gray-400 font-normal ml-0.5">(환자 교육)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox"
                                                 name="techPassive" value="Postural Training" class="peer sr-only"><span
                                                 class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Postural
-                                                Training</span></label>
+                                                Training <span class="text-[11px] text-gray-400 font-normal ml-0.5">(자세 훈련)</span></span></label>
                                     </div>
                                 </div>
                                 <div>
@@ -665,28 +665,28 @@
                                     <div class="flex flex-wrap gap-2">
                                         <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
                                                 value="Thoracolumbar" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Thoracolumbar</span></label>
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Thoracolumbar <span class="text-[11px] text-gray-400 font-normal ml-0.5">(흉요추부)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
                                                 value="Shoulder" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Shoulder</span></label>
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Shoulder <span class="text-[11px] text-gray-400 font-normal ml-0.5">(어깨)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
                                                 value="Elbow" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Elbow</span></label>
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Elbow <span class="text-[11px] text-gray-400 font-normal ml-0.5">(팔꿈치)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
                                                 value="Wrist" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Wrist</span></label>
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Wrist <span class="text-[11px] text-gray-400 font-normal ml-0.5">(손목)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
                                                 value="Hip" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Hip</span></label>
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Hip <span class="text-[11px] text-gray-400 font-normal ml-0.5">(고관절)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
                                                 value="Knee" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Knee</span></label>
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Knee <span class="text-[11px] text-gray-400 font-normal ml-0.5">(무릎)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
                                                 value="Ankle" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Ankle</span></label>
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Ankle <span class="text-[11px] text-gray-400 font-normal ml-0.5">(발목)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
                                                 value="Cervical" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Cervical</span></label>
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Cervical <span class="text-[11px] text-gray-400 font-normal ml-0.5">(경추부)</span></span></label>
                                     </div>
                                 </div>
                                 <div>
@@ -697,47 +697,45 @@
                                                 name="techActive" value="Soft Tissue Mobilization"
                                                 class="peer sr-only"><span
                                                 class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Soft
-                                                Tissue Mobilization</span></label>
+                                                Tissue Mobilization <span class="text-[11px] text-gray-400 font-normal ml-0.5">(연부조직 가동술)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox"
                                                 name="techActive" value="Trigger Point Release"
                                                 class="peer sr-only"><span
                                                 class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Trigger
-                                                Point Release</span></label>
+                                                Point Release <span class="text-[11px] text-gray-400 font-normal ml-0.5">(통증유발점 이완술)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox"
                                                 name="techActive" value="Joint Mobilization" class="peer sr-only"><span
                                                 class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Joint
-                                                Mobilization</span></label>
+                                                Mobilization <span class="text-[11px] text-gray-400 font-normal ml-0.5">(관절 가동술)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox"
                                                 name="techActive" value="Myofascial Release (MFR)"
                                                 class="peer sr-only"><span
                                                 class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Myofascial
-                                                Release (MFR)</span></label>
+                                                Release (MFR) <span class="text-[11px] text-gray-400 font-normal ml-0.5">(근막 이완술)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox"
-                                                name="techActive" value="MET (근에너지 기법)" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">MET
-                                                (근에너지 기법)</span></label>
+                                                name="techActive" value="MET" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">MET <span class="text-[11px] text-gray-400 font-normal ml-0.5">(근에너지 기법)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox"
                                                 name="techActive" value="Neural Mobilization" class="peer sr-only"><span
                                                 class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Neural
-                                                Mobilization</span></label>
+                                                Mobilization <span class="text-[11px] text-gray-400 font-normal ml-0.5">(신경 가동술)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox"
                                                 name="techActive" value="Manual Traction" class="peer sr-only"><span
                                                 class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Manual
-                                                Traction</span></label>
+                                                Traction <span class="text-[11px] text-gray-400 font-normal ml-0.5">(도수 견인)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox"
                                                 name="techActive" value="Passive Stretching" class="peer sr-only"><span
                                                 class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Passive
-                                                Stretching</span></label>
+                                                Stretching <span class="text-[11px] text-gray-400 font-normal ml-0.5">(수동 스트레칭)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox"
-                                                name="techActive" value="MWM (움직임 동반 가동술)" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">MWM
-                                                (움직임 동반 가동술)</span></label>
+                                                name="techActive" value="MWM" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">MWM <span class="text-[11px] text-gray-400 font-normal ml-0.5">(움직임 동반 가동술)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox"
                                                 name="techActive" value="PNF" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">PNF</span></label>
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">PNF <span class="text-[11px] text-gray-400 font-normal ml-0.5">(고유수용성 신경근 촉진법)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox"
                                                 name="techActive" value="Sling" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Sling</span></label>
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Sling <span class="text-[11px] text-gray-400 font-normal ml-0.5">(슬링 치료)</span></span></label>
                                     </div>
                                 </div>
                             </div>
@@ -1278,7 +1276,7 @@
                 }
 
                 let subjectiveText = `1. C/C (주호소): ${getVal('f_cc')}\n`;
-                if (painChangeVal && painChangeVal !== '첫 회차 (생략)') {
+                if (painChangeVal) {
                     subjectiveText += `2. 통증 변화 기록: ${painChangeVal}\n`;
                 }
                 subjectiveText += `3. Pain intensity (VAS): VAS ${getVal('f_vasScore')}/10, ${getVal('painFreq')}`;
@@ -1401,7 +1399,7 @@ P) Plan
                     if (ccEl) ccEl.value = extract(/1\. C\/C \(주호소\):\s*(.*)/);
 
                     const extractedPainChange = extract(/2\. 통증 변화 기록:\s*(.*)/);
-                    checkRadios('painChange', extractedPainChange ? extractedPainChange : '첫 회차 (생략)');
+                    checkRadios('painChange', extractedPainChange ? extractedPainChange : '첫 회차');
 
                     const vasMatch = text.match(/3\. Pain intensity \(VAS\): VAS (\d+)\/10,\s*(.*)/);
                     if (vasMatch) {
