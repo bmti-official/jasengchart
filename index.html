@@ -1495,7 +1495,7 @@ P) Plan
                     }
 
                     const ccEl = document.getElementById('f_cc');
-                    if (ccEl) ccEl.value = extract(/1\. C\/C \(주호소\):\s*(.*)/);
+                    if (ccEl) ccEl.value = extract(/1\. C\/C \(주호소\):[ \t]*(.*)/);
 
                     const extractedPainChange = extract(/2\. 통증 변화 기록:\s*(.*)/);
                     checkRadios('painChange', extractedPainChange ? extractedPainChange : '첫 회차');
@@ -1588,12 +1588,26 @@ P) Plan
                         const spBlockMatch = rText.match(/5\. Special tests:([\s\S]*)/);
                         if (spBlockMatch) {
                             const spLines = spBlockMatch[1].split('\n').filter(l => l.trim().startsWith('-'));
+                            const matchedSpNames = new Set();
                             spLines.forEach(line => {
-                                const lineMatch = line.match(/-\s*(.*?):\s*(.*?)(?:\s*\((.*?)\))?$/);
-                                if (lineMatch) {
-                                    const spName = lineMatch[1].trim();
-                                    const spRes = lineMatch[2].trim();
-                                    const spNote = lineMatch[3] ? lineMatch[3].trim() : '';
+                                const colonIdx = line.indexOf(':');
+                                if (colonIdx > -1) {
+                                    const spName = line.substring(1, colonIdx).trim();
+                                    matchedSpNames.add(spName);
+                                    let rest = line.substring(colonIdx + 1).trim();
+                                    
+                                    let spRes = rest;
+                                    let spNote = '';
+                                    const resMatch = rest.match(/^(좌\([+-]\)\s*\/\s*우\([+-]\)|L\([+-]\)\s*\/\s*R\([+-]\)|\([+-]\))/);
+                                    if (resMatch) {
+                                        spRes = resMatch[1];
+                                        let notePart = rest.substring(resMatch[0].length).trim();
+                                        if (notePart.startsWith('(') && notePart.endsWith(')')) {
+                                            spNote = notePart.substring(1, notePart.length - 1);
+                                        } else {
+                                            spNote = notePart;
+                                        }
+                                    }
 
                                     let spIndex = r.spList.findIndex(s => s.name === spName);
                                     if (spIndex === -1) {
@@ -1624,6 +1638,14 @@ P) Plan
                                         const noteEl = document.getElementById(`f_spNote_${idBase}`);
                                         if (noteEl) noteEl.value = spNote;
                                     }
+                                }
+                            });
+
+                            // 생략된(텍스트에 없는) 테스트 항목들 처리
+                            r.spList.forEach((spObj, idx) => {
+                                if (!matchedSpNames.has(spObj.name)) {
+                                    const omitEl = document.getElementById(`f_spOmit_${key}_sp_${idx}`);
+                                    if (omitEl) omitEl.checked = true;
                                 }
                             });
                         }
