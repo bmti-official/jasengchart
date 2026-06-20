@@ -812,7 +812,7 @@
                                 class="form-label text-sm font-bold text-gray-900 border-b border-gray-100 pb-3 mb-4">3.
                                 Follow-up Plan <span class="text-xs text-gray-400 font-normal ml-1">(추후 계획)</span></label>
                             <textarea id="f_followUp" class="form-textarea h-24"
-                                placeholder="예: 지속적인 근력운동 유지"></textarea>
+                                placeholder="예: 지속적인 근력훈련 유지"></textarea>
                         </div>
                     </div>
                 </div>
@@ -836,7 +836,7 @@
                         { name: 'Rotation', norm: '75' }
                     ],
                     mmtItems: ['Flexion', 'Extension', 'Lat. Bending', 'Rotation'],
-                    spList: ['Spurling', 'Distraction']
+                    spList: [{ name: 'Spurling', bilateral: true }]
                 },
                 lumbar: {
                     label: "Lumbar",
@@ -848,7 +848,11 @@
                         { name: 'Lat. Bending', norm: '35' }
                     ],
                     mmtItems: ['Flexion', 'Extension', 'Lat. Bending', 'Rotation'],
-                    spList: ['SLR', 'Slump test']
+                    spList: [
+                        { name: 'SLR', bilateral: true },
+                        { name: 'Patrick', bilateral: true },
+                        { name: 'Hip Extention', bilateral: true }
+                    ]
                 },
                 shoulder: {
                     label: "Shoulder",
@@ -861,7 +865,11 @@
                         { name: 'In./ext.Rot.', norm: '90' }
                     ],
                     mmtItems: ['Flexion', 'Extension', 'Abduction', 'Hori. abd.', 'Hori. add.', 'In./ext.Rot.'],
-                    spList: ['Neer', 'Hawkins', 'Empty can']
+                    spList: [
+                        { name: 'Neer', bilateral: true },
+                        { name: 'Hawkins', bilateral: true },
+                        { name: 'Empty can', bilateral: true }
+                    ]
                 },
                 hip: {
                     label: "Hip",
@@ -875,7 +883,10 @@
                         { name: 'Ext. Rot.', norm: '45' }
                     ],
                     mmtItems: ['Flexion', 'Extension', 'Abduction', 'Adduction', 'In.Rot.', 'Ext. Rot.'],
-                    spList: ['FABER', 'Thomas test']
+                    spList: [
+                        { name: 'FABER', bilateral: true },
+                        { name: 'Thomas test', bilateral: true }
+                    ]
                 },
                 knee: {
                     label: "Knee",
@@ -885,7 +896,10 @@
                         { name: 'Extension', norm: '0' }
                     ],
                     mmtItems: ['Flexion', 'Extension'],
-                    spList: ['Lachman', 'McMurray']
+                    spList: [
+                        { name: 'Lachman', bilateral: true },
+                        { name: 'McMurray', bilateral: true }
+                    ]
                 },
                 ankle: {
                     label: "Ankle",
@@ -897,7 +911,9 @@
                         { name: 'Eversion', norm: '25' }
                     ],
                     mmtItems: ['Flexion', 'Extension', 'Inversion', 'Eversion'],
-                    spList: ['Anterior drawer']
+                    spList: [
+                        { name: 'Anterior drawer', bilateral: true }
+                    ]
                 },
                 elbow: {
                     label: "Elbow",
@@ -908,7 +924,10 @@
                         { name: 'Wrist - Flexion', norm: '80' }
                     ],
                     mmtItems: ['Flexion', 'Extension'],
-                    spList: ['Cozen', 'Golfer\'s elbow']
+                    spList: [
+                        { name: 'Cozen', bilateral: true },
+                        { name: 'Golfer\'s elbow', bilateral: true }
+                    ]
                 },
                 wrist: {
                     label: "Wrist",
@@ -919,9 +938,57 @@
                         { name: 'Ulnar dev.', norm: '35' }
                     ],
                     mmtItems: ['Flexion', 'Extension', 'Radial dev.', 'Ulnar dev.'],
-                    spList: ['Phalen', 'Tinel']
+                    spList: [
+                        { name: 'Phalen', bilateral: true },
+                        { name: 'Tinel', bilateral: true }
+                    ]
                 }
             };
+
+            function generateSpRow(regionId, spObj, index) {
+                const idBase = `${regionId}_sp_${index}`;
+                
+                let resultHtml = '';
+                if (spObj.bilateral) {
+                    resultHtml = `
+                        <div class="flex flex-col gap-1">
+                            <div class="flex items-center justify-center gap-1">
+                                <span class="text-[10px] text-gray-500 w-3">좌</span>
+                                <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}_L" value="L(+)" class="peer sr-only"><span class="block px-2 py-0.5 rounded-full border border-gray-200 text-[10px] font-bold text-gray-600 transition-colors">(+)</span></label>
+                                <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}_L" value="L(-)" class="peer sr-only" checked><span class="block px-2 py-0.5 rounded-full border border-gray-200 text-[10px] font-bold text-gray-600 transition-colors">(-)</span></label>
+                            </div>
+                            <div class="flex items-center justify-center gap-1">
+                                <span class="text-[10px] text-gray-500 w-3">우</span>
+                                <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}_R" value="R(+)" class="peer sr-only"><span class="block px-2 py-0.5 rounded-full border border-gray-200 text-[10px] font-bold text-gray-600 transition-colors">(+)</span></label>
+                                <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}_R" value="R(-)" class="peer sr-only" checked><span class="block px-2 py-0.5 rounded-full border border-gray-200 text-[10px] font-bold text-gray-600 transition-colors">(-)</span></label>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultHtml = `
+                        <div class="flex justify-center gap-2">
+                            <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}" value="(+)" class="peer sr-only"><span class="block px-3 py-1 rounded-full border border-gray-200 text-[10px] font-bold text-gray-600 transition-colors">양성 (+)</span></label>
+                            <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}" value="(-)" class="peer sr-only" checked><span class="block px-3 py-1 rounded-full border border-gray-200 text-[10px] font-bold text-gray-600 transition-colors">음성 (-)</span></label>
+                        </div>
+                    `;
+                }
+
+                return \`
+                    <div class="grid grid-cols-12 gap-2 items-center mb-3 last:mb-0 sp-row">
+                        <div class="col-span-3 text-xs font-medium text-gray-700 break-words leading-tight">\${spObj.name}</div>
+                        <div class="col-span-4">\${resultHtml}</div>
+                        <div class="col-span-4">
+                            <input id="f_spNote_\${idBase}" type="text" class="form-input text-xs px-2 py-1.5 h-[34px]" placeholder="특이사항 입력">
+                        </div>
+                        <div class="col-span-1 flex justify-center">
+                            <label class="cursor-pointer check-pill">
+                                <input type="checkbox" id="f_spOmit_\${idBase}" class="peer sr-only">
+                                <span class="block px-2 py-1 rounded bg-gray-100 border border-gray-200 text-[10px] font-medium text-gray-500 peer-checked:bg-red-500 peer-checked:text-white peer-checked:border-red-500 transition-colors">생략</span>
+                            </label>
+                        </div>
+                    </div>
+                \`;
+            }
 
             const regionSelector = document.getElementById('regionSelector');
             Object.keys(regionData).forEach(key => {
@@ -1018,25 +1085,22 @@
                     // Special Tests Section
                     let spHtml = `
                         <div class="mb-4 bg-gray-50 rounded-lg p-4 border border-gray-100">
-                            <div class="grid grid-cols-12 gap-4 mb-3 pb-2 border-b border-gray-200">
-                                <div class="col-span-4 text-xs font-bold text-gray-500 uppercase tracking-wider">항목</div>
-                                <div class="col-span-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">양성(+) / 음성(-)</div>
+                            <div class="grid grid-cols-12 gap-2 mb-3 pb-2 border-b border-gray-200">
+                                <div class="col-span-3 text-xs font-bold text-gray-500 uppercase tracking-wider">항목</div>
+                                <div class="col-span-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">결과</div>
                                 <div class="col-span-4 text-xs font-bold text-gray-500 uppercase tracking-wider">특이사항</div>
+                                <div class="col-span-1 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">생략</div>
                             </div>
-                            ${r.spList.map(sp => {
-                        const idBase = `${id}_${sp.replace(/[^a-zA-Z]/g, '')}`;
-                        return `
-                                <div class="grid grid-cols-12 gap-4 items-center mb-3 last:mb-0">
-                                    <div class="col-span-4 text-sm font-medium text-gray-700 break-words">${sp}</div>
-                                    <div class="col-span-4 flex justify-center gap-2">
-                                        <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}" value="(+)" class="peer sr-only"><span class="block px-3 py-1 rounded-full border border-gray-200 text-xs font-bold text-gray-600 transition-colors">양성 (+)</span></label>
-                                        <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}" value="(-)" class="peer sr-only" checked><span class="block px-3 py-1 rounded-full border border-gray-200 text-xs font-bold text-gray-600 transition-colors">음성 (-)</span></label>
-                                    </div>
-                                    <div class="col-span-4">
-                                        <input id="f_spNote_${idBase}" type="text" class="form-input text-xs px-2 py-1.5 h-[34px]" placeholder="특이사항 입력">
-                                    </div>
-                                </div>`;
-                    }).join('')}
+                            <div id="spListContainer_${id}">
+                                ${r.spList.map((spObj, idx) => generateSpRow(id, spObj, idx)).join('')}
+                            </div>
+                            <div class="mt-3 flex gap-2 items-center">
+                                <input type="text" id="f_newSp_${id}" class="form-input text-xs px-2 py-1.5 h-[34px] w-full" placeholder="새로운 스페셜 테스트 입력">
+                                <label class="flex items-center gap-1 text-xs text-gray-600 whitespace-nowrap">
+                                    <input type="checkbox" id="f_newSp_bi_${id}" class="rounded border-gray-300" checked> 좌우 구분
+                                </label>
+                                <button type="button" class="bg-brand-green hover:bg-brand-greenHover text-white px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap btn-add-sp" data-region="${id}">추가</button>
+                            </div>
                         </div>
                     `;
 
@@ -1074,6 +1138,26 @@
                         </div>
                     `;
                     dynamicContainer.insertAdjacentHTML('beforeend', html);
+                });
+
+                // 추가 버튼 이벤트 리스너 바인딩
+                document.querySelectorAll('.btn-add-sp').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const regionId = e.target.getAttribute('data-region');
+                        const inputEl = document.getElementById(`f_newSp_${regionId}`);
+                        const biEl = document.getElementById(`f_newSp_bi_${regionId}`);
+                        const name = inputEl.value.trim();
+                        if (!name) return;
+
+                        const spObj = { name: name, bilateral: biEl.checked };
+                        regionData[regionId].spList.push(spObj);
+                        
+                        const newIndex = regionData[regionId].spList.length - 1;
+                        const rowHtml = generateSpRow(regionId, spObj, newIndex);
+                        document.getElementById(`spListContainer_${regionId}`).insertAdjacentHTML('beforeend', rowHtml);
+                        
+                        inputEl.value = '';
+                    });
                 });
 
                 // Limitation 없음을 눌렀을 때 원인 적을 수 없게 만들기
@@ -1260,13 +1344,28 @@
                         });
 
                         let spText = `\n5. Special tests:`;
-                        r.spList.forEach(sp => {
-                            const idBase = `${id}_${sp.replace(/[^a-zA-Z]/g, '')}`;
-                            const res = getVal(`spRes_${idBase}`);
+                        r.spList.forEach((spObj, idx) => {
+                            const idBase = `${id}_sp_${idx}`;
+                            const omitEl = document.getElementById(`f_spOmit_${idBase}`);
+                            if (omitEl && omitEl.checked) return;
+
+                            let res = "";
+                            if (spObj.bilateral) {
+                                const lRes = getVal(`spRes_${idBase}_L`);
+                                const rRes = getVal(`spRes_${idBase}_R`);
+                                res = `L${lRes} / R${rRes}`;
+                            } else {
+                                res = getVal(`spRes_${idBase}`);
+                            }
+
                             const note = getVal(`f_spNote_${idBase}`);
                             const noteText = note ? ` (${note})` : '';
-                            spText += `\n   - ${sp}: ${res}${noteText}`;
+                            spText += `\n   - ${spObj.name}: ${res}${noteText}`;
                         });
+                        
+                        if (spText === `\n5. Special tests:`) {
+                            spText += ` 생략됨`;
+                        }
 
                         dynamicReportText += `
 [${r.label} 세부 검사]
@@ -1486,19 +1585,48 @@ P) Plan
                             }
                         });
 
-                        r.spList.forEach(sp => {
-                            const idBase = `${key}_${sp.replace(/[^a-zA-Z]/g, '')}`;
-                            const escapedName = sp.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                            const itemRegex = new RegExp(`-\\s*${escapedName}:\\s*(\\(\\+\\)|\\(-\\))(?:\\s*\\((.*?)\\))?`);
-                            const iMatch = rText.match(itemRegex);
-                            if (iMatch) {
-                                checkRadios(`spRes_${idBase}`, iMatch[1]);
-                                if (iMatch[2]) {
-                                    const noteEl = document.getElementById(`f_spNote_${idBase}`);
-                                    if (noteEl) noteEl.value = iMatch[2].trim();
+                        const spBlockMatch = rText.match(/5\. Special tests:([\s\S]*)/);
+                        if (spBlockMatch) {
+                            const spLines = spBlockMatch[1].split('\n').filter(l => l.trim().startsWith('-'));
+                            spLines.forEach(line => {
+                                const lineMatch = line.match(/-\s*(.*?):\s*(.*?)(?:\s*\((.*?)\))?$/);
+                                if (lineMatch) {
+                                    const spName = lineMatch[1].trim();
+                                    const spRes = lineMatch[2].trim();
+                                    const spNote = lineMatch[3] ? lineMatch[3].trim() : '';
+
+                                    let spIndex = r.spList.findIndex(s => s.name === spName);
+                                    if (spIndex === -1) {
+                                        const isBi = spRes.includes('L(') || spRes.includes('R(');
+                                        r.spList.push({ name: spName, bilateral: isBi });
+                                        spIndex = r.spList.length - 1;
+                                        const rowHtml = generateSpRow(key, r.spList[spIndex], spIndex);
+                                        const container = document.getElementById(`spListContainer_${key}`);
+                                        if (container) container.insertAdjacentHTML('beforeend', rowHtml);
+                                    }
+
+                                    const spObj = r.spList[spIndex];
+                                    const idBase = `${key}_sp_${spIndex}`;
+                                    
+                                    const omitEl = document.getElementById(`f_spOmit_${idBase}`);
+                                    if (omitEl) omitEl.checked = false;
+
+                                    if (spObj.bilateral) {
+                                        const lMatch = spRes.match(/L\((.*?)\)/);
+                                        const rMatch = spRes.match(/R\((.*?)\)/);
+                                        if (lMatch) checkRadios(`spRes_${idBase}_L`, `L(${lMatch[1]})`);
+                                        if (rMatch) checkRadios(`spRes_${idBase}_R`, `R(${rMatch[1]})`);
+                                    } else {
+                                        checkRadios(`spRes_${idBase}`, spRes);
+                                    }
+
+                                    if (spNote) {
+                                        const noteEl = document.getElementById(`f_spNote_${idBase}`);
+                                        if (noteEl) noteEl.value = spNote;
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     });
 
                     const postureGaitMatch = text.match(/6\. 자세 & 보행:\s*Posture:\s*(.*?),\s*Gait:\s*(.*)/);
