@@ -973,21 +973,21 @@
                     `;
                 }
 
-                return \`
+                return `
                     <div class="grid grid-cols-12 gap-2 items-center mb-3 last:mb-0 sp-row">
-                        <div class="col-span-3 text-xs font-medium text-gray-700 break-words leading-tight">\${spObj.name}</div>
-                        <div class="col-span-4">\${resultHtml}</div>
+                        <div class="col-span-3 text-xs font-medium text-gray-700 break-words leading-tight">${spObj.name}</div>
+                        <div class="col-span-4">${resultHtml}</div>
                         <div class="col-span-4">
-                            <input id="f_spNote_\${idBase}" type="text" class="form-input text-xs px-2 py-1.5 h-[34px]" placeholder="특이사항 입력">
+                            <input id="f_spNote_${idBase}" type="text" class="form-input text-xs px-2 py-1.5 h-[34px]" placeholder="특이사항 입력">
                         </div>
                         <div class="col-span-1 flex justify-center">
                             <label class="cursor-pointer check-pill">
-                                <input type="checkbox" id="f_spOmit_\${idBase}" class="peer sr-only">
+                                <input type="checkbox" id="f_spOmit_${idBase}" class="peer sr-only">
                                 <span class="block px-2 py-1 rounded bg-gray-100 border border-gray-200 text-[10px] font-medium text-gray-500 peer-checked:bg-red-500 peer-checked:text-white peer-checked:border-red-500 transition-colors">생략</span>
                             </label>
                         </div>
                     </div>
-                \`;
+                `;
             }
 
             const regionSelector = document.getElementById('regionSelector');
