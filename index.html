@@ -954,13 +954,13 @@
                         <div class="flex flex-col gap-1">
                             <div class="flex items-center justify-center gap-1">
                                 <span class="text-[10px] text-gray-500 w-3">좌</span>
-                                <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}_L" value="L(+)" class="peer sr-only"><span class="block px-2 py-0.5 rounded-full border border-gray-200 text-[10px] font-bold text-gray-600 transition-colors">(+)</span></label>
-                                <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}_L" value="L(-)" class="peer sr-only" checked><span class="block px-2 py-0.5 rounded-full border border-gray-200 text-[10px] font-bold text-gray-600 transition-colors">(-)</span></label>
+                                <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}_L" value="(+)" class="peer sr-only"><span class="block px-2 py-0.5 rounded-full border border-gray-200 text-[10px] font-bold text-gray-600 transition-colors">(+)</span></label>
+                                <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}_L" value="(-)" class="peer sr-only" checked><span class="block px-2 py-0.5 rounded-full border border-gray-200 text-[10px] font-bold text-gray-600 transition-colors">(-)</span></label>
                             </div>
                             <div class="flex items-center justify-center gap-1">
                                 <span class="text-[10px] text-gray-500 w-3">우</span>
-                                <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}_R" value="R(+)" class="peer sr-only"><span class="block px-2 py-0.5 rounded-full border border-gray-200 text-[10px] font-bold text-gray-600 transition-colors">(+)</span></label>
-                                <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}_R" value="R(-)" class="peer sr-only" checked><span class="block px-2 py-0.5 rounded-full border border-gray-200 text-[10px] font-bold text-gray-600 transition-colors">(-)</span></label>
+                                <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}_R" value="(+)" class="peer sr-only"><span class="block px-2 py-0.5 rounded-full border border-gray-200 text-[10px] font-bold text-gray-600 transition-colors">(+)</span></label>
+                                <label class="cursor-pointer check-pill"><input type="radio" name="spRes_${idBase}_R" value="(-)" class="peer sr-only" checked><span class="block px-2 py-0.5 rounded-full border border-gray-200 text-[10px] font-bold text-gray-600 transition-colors">(-)</span></label>
                             </div>
                         </div>
                     `;
@@ -1353,7 +1353,7 @@
                             if (spObj.bilateral) {
                                 const lRes = getVal(`spRes_${idBase}_L`);
                                 const rRes = getVal(`spRes_${idBase}_R`);
-                                res = `L${lRes} / R${rRes}`;
+                                res = `좌${lRes} / 우${rRes}`;
                             } else {
                                 res = getVal(`spRes_${idBase}`);
                             }
@@ -1597,7 +1597,7 @@ P) Plan
 
                                     let spIndex = r.spList.findIndex(s => s.name === spName);
                                     if (spIndex === -1) {
-                                        const isBi = spRes.includes('L(') || spRes.includes('R(');
+                                        const isBi = spRes.includes('L(') || spRes.includes('R(') || spRes.includes('좌(') || spRes.includes('우(');
                                         r.spList.push({ name: spName, bilateral: isBi });
                                         spIndex = r.spList.length - 1;
                                         const rowHtml = generateSpRow(key, r.spList[spIndex], spIndex);
@@ -1612,10 +1612,10 @@ P) Plan
                                     if (omitEl) omitEl.checked = false;
 
                                     if (spObj.bilateral) {
-                                        const lMatch = spRes.match(/L\((.*?)\)/);
-                                        const rMatch = spRes.match(/R\((.*?)\)/);
-                                        if (lMatch) checkRadios(`spRes_${idBase}_L`, `L(${lMatch[1]})`);
-                                        if (rMatch) checkRadios(`spRes_${idBase}_R`, `R(${rMatch[1]})`);
+                                        const lMatch = spRes.match(/좌\((.*?)\)/) || spRes.match(/L\((.*?)\)/);
+                                        const rMatch = spRes.match(/우\((.*?)\)/) || spRes.match(/R\((.*?)\)/);
+                                        if (lMatch) checkRadios(`spRes_${idBase}_L`, `(${lMatch[1]})`);
+                                        if (rMatch) checkRadios(`spRes_${idBase}_R`, `(${rMatch[1]})`);
                                     } else {
                                         checkRadios(`spRes_${idBase}`, spRes);
                                     }
