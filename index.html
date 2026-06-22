@@ -1267,13 +1267,7 @@
             endSelect.addEventListener('change', calculateTotalTime);
             calculateTotalTime();
 
-            const vasSlider = document.getElementById('f_vasScore');
-            const vasDisplay = document.getElementById('vasDisplay');
-            vasSlider.addEventListener('input', (e) => { vasDisplay.textContent = `${e.target.value}/10`; });
 
-            const resVasSlider = document.getElementById('f_responseVas');
-            const resVasDisplay = document.getElementById('responseVasDisplay');
-            resVasSlider.addEventListener('input', (e) => { resVasDisplay.textContent = `${e.target.value}/10`; });
 
             const swellingRadios = document.querySelectorAll('input[name="swelling"]');
             const swellingLocContainer = document.getElementById('swellingLocContainer');
@@ -1332,12 +1326,12 @@
                     document.getElementById('chartForm').reset();
 
                     // Reset custom displays
-                    document.getElementById('vasDisplay').textContent = document.getElementById('f_vasScore').defaultValue + "/10";
-                    document.getElementById('responseVasDisplay').textContent = document.getElementById('f_responseVas').defaultValue + "/10";
                     document.getElementById('swellingLocContainer').classList.remove('hidden');
 
                     // Clear dynamic regions
-                    document.getElementById('dynamicRegionsContainer').innerHTML = `<p class="text-sm text-gray-400 text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">위의 '치료 부위'를 선택하시면 해당 부위의 ROM, MMT, Special Test 항목이 여기에 나타납니다.</p>`;
+                    document.getElementById('dynamicRegionsContainer').innerHTML = `<p class="text-sm text-gray-400 text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">위의 '치료 부위'를 선택하시면 해당 부위의 NRS, ROM, MMT, Special Test 항목이 여기에 나타납니다.</p>`;
+                    document.getElementById('dynamicNrsSubjectiveContainer').innerHTML = `<p class="text-sm text-gray-400 text-center py-4">위에서 '치료 부위'를 선택하시면 해당 부위의 NRS 슬라이더가 나타납니다.</p>`;
+                    document.getElementById('dynamicNrsPlanContainer').innerHTML = `<p class="text-sm text-gray-400 text-center py-4">치료 부위를 선택하시면 해당 부위의 치료 후 NRS 슬라이더가 나타납니다.</p>`;
                     document.getElementById('regionCountText').textContent = "0개 선택됨";
                 }
             });
