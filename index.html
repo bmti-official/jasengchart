@@ -273,6 +273,17 @@
                         Subjective <span class="text-xs text-gray-400 font-normal ml-1">(주관적 증상)</span>
                     </h2>
 
+                    <!-- 치료 부위 선택기 -->
+                    <div class="pb-6 border-b border-gray-100 bg-brand-bg/30 p-6 rounded-xl border border-gray-200 mb-8">
+                        <h3 class="text-sm font-bold text-brand-green mb-4 flex justify-between items-center">
+                            치료 부위 선택 (최대 2개)
+                            <span class="text-xs font-normal text-gray-500" id="regionCountText">0개 선택됨</span>
+                        </h3>
+                        <div class="flex flex-wrap gap-2" id="regionSelector">
+                            <!-- JS에서 채워짐 -->
+                        </div>
+                    </div>
+
                     <div class="space-y-8">
                         <div>
                             <label class="form-label">1. C/C (주호소 / Chief Complaint)</label>
@@ -314,34 +325,30 @@
                         </div>
 
                         <div>
-                            <div class="flex justify-between items-end mb-2">
-                                <label class="form-label mb-0">3. Pain intensity (VAS) <span class="text-xs text-gray-400 font-normal ml-1">(통증 강도)</span></label>
-                                <span class="text-brand-green font-bold text-lg" id="vasDisplay">7/10</span>
-                            </div>
-                            <div
-                                class="flex flex-col md:flex-row gap-8 items-center bg-gray-50 p-6 rounded-xl border border-gray-100">
-                                <div class="w-full md:w-1/2">
-                                    <input type="range" id="f_vasScore" name="vasScore" min="0" max="10" value="7">
-                                    <div class="flex justify-between text-xs text-gray-400 mt-2 font-medium px-1">
-                                        <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
-                                    </div>
+                            <label class="form-label mb-4">3. Pain intensity (NRS) & Frequency <span class="text-xs text-gray-400 font-normal ml-1">(통증 강도 및 빈도)</span></label>
+                            
+                            <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 mb-4">
+                                <div id="dynamicNrsSubjectiveContainer" class="space-y-6">
+                                    <p class="text-sm text-gray-400 text-center py-4">위에서 '치료 부위'를 선택하시면 해당 부위의 NRS 슬라이더가 나타납니다.</p>
                                 </div>
-                                <div class="w-full md:w-1/2">
-                                    <div class="flex flex-wrap gap-2">
-                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="painFreq"
-                                                value="지속적" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">지속적</span></label>
-                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="painFreq"
-                                                value="간헐적" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">간헐적</span></label>
-                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="painFreq"
-                                                value="동작시 발생" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">동작시
-                                                발생</span></label>
-                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="painFreq"
-                                                value="야간통" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">야간통</span></label>
-                                    </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
+                                <h4 class="text-sm font-semibold text-gray-700 mb-3">Pain frequency <span class="text-xs text-gray-400 font-normal ml-1">(통증 빈도)</span></h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <label class="cursor-pointer check-pill"><input type="checkbox" name="painFreq"
+                                            value="지속적" class="peer sr-only"><span
+                                            class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">지속적</span></label>
+                                    <label class="cursor-pointer check-pill"><input type="checkbox" name="painFreq"
+                                            value="간헐적" class="peer sr-only"><span
+                                            class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">간헐적</span></label>
+                                    <label class="cursor-pointer check-pill"><input type="checkbox" name="painFreq"
+                                            value="동작시 발생" class="peer sr-only"><span
+                                            class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">동작시
+                                            발생</span></label>
+                                    <label class="cursor-pointer check-pill"><input type="checkbox" name="painFreq"
+                                            value="야간통" class="peer sr-only"><span
+                                            class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">야간통</span></label>
                                 </div>
                             </div>
                         </div>
@@ -438,22 +445,13 @@
                             </div>
                         </div>
 
-                        <!-- 치료 부위 선택기 -->
-                        <div class="pb-6 border-b border-gray-100 bg-brand-bg/30 p-6 rounded-xl border border-gray-200">
-                            <h3 class="text-sm font-bold text-brand-green mb-4 flex justify-between items-center">
-                                치료 부위 선택 (최대 2개)
-                                <span class="text-xs font-normal text-gray-500" id="regionCountText">0개 선택됨</span>
-                            </h3>
-                            <div class="flex flex-wrap gap-2" id="regionSelector">
-                                <!-- JS에서 채워짐 -->
-                            </div>
-                        </div>
+
 
                         <!-- 동적 폼 영역 -->
                         <div id="dynamicRegionsContainer" class="space-y-8">
                             <p
                                 class="text-sm text-gray-400 text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                                위의 '치료 부위'를 선택하시면 해당 부위의 ROM, MMT, Special Test 항목이 여기에 나타납니다.
+                                위의 '치료 부위'를 선택하시면 해당 부위의 NRS, ROM, MMT, Special Test 항목이 여기에 나타납니다.
                             </p>
                         </div>
 
@@ -795,14 +793,10 @@
                                 </div>
                             </div>
 
-                            <div class="bg-gray-50 p-6 rounded-xl border border-gray-100">
-                                <div class="flex justify-between items-end mb-2">
-                                    <label class="form-label mb-0">Response VAS <span class="text-xs text-gray-400 font-normal ml-1">(치료 후 통증)</span></label>
-                                    <span class="text-brand-green font-bold text-lg" id="responseVasDisplay">7/10</span>
-                                </div>
-                                <input type="range" id="f_responseVas" name="responseVas" min="0" max="10" value="7">
-                                <div class="flex justify-between text-xs text-gray-400 mt-2 font-medium px-1">
-                                    <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+                            <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 mt-4">
+                                <h4 class="text-sm font-semibold text-gray-700 mb-4">Response NRS <span class="text-xs text-gray-400 font-normal ml-1">(치료 후 통증)</span></h4>
+                                <div id="dynamicNrsPlanContainer" class="space-y-6">
+                                    <p class="text-sm text-gray-400 text-center py-4">치료 부위를 선택하시면 해당 부위의 치료 후 NRS 슬라이더가 나타납니다.</p>
                                 </div>
                             </div>
                         </div>
@@ -1005,6 +999,8 @@
             const regionCheckboxes = document.querySelectorAll('input[name="selectedRegions"]');
             const regionCountText = document.getElementById('regionCountText');
             const dynamicContainer = document.getElementById('dynamicRegionsContainer');
+            const nrsSubjectiveContainer = document.getElementById('dynamicNrsSubjectiveContainer');
+            const nrsPlanContainer = document.getElementById('dynamicNrsPlanContainer');
 
             regionCheckboxes.forEach(cb => {
                 cb.addEventListener('change', (e) => {
@@ -1021,13 +1017,48 @@
 
             function renderDynamicRegions(selectedKeys) {
                 if (selectedKeys.length === 0) {
-                    dynamicContainer.innerHTML = `<p class="text-sm text-gray-400 text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">위의 '치료 부위'를 선택하시면 해당 부위의 ROM, MMT, Special Test 항목이 여기에 나타납니다.</p>`;
+                    dynamicContainer.innerHTML = `<p class="text-sm text-gray-400 text-center py-10 bg-gray-50 rounded-xl border border-dashed border-gray-200">위의 '치료 부위'를 선택하시면 해당 부위의 NRS, ROM, MMT, Special Test 항목이 여기에 나타납니다.</p>`;
+                    nrsSubjectiveContainer.innerHTML = `<p class="text-sm text-gray-400 text-center py-4">위에서 '치료 부위'를 선택하시면 해당 부위의 NRS 슬라이더가 나타납니다.</p>`;
+                    nrsPlanContainer.innerHTML = `<p class="text-sm text-gray-400 text-center py-4">치료 부위를 선택하시면 해당 부위의 치료 후 NRS 슬라이더가 나타납니다.</p>`;
                     return;
                 }
 
                 dynamicContainer.innerHTML = '';
+                nrsSubjectiveContainer.innerHTML = '';
+                nrsPlanContainer.innerHTML = '';
+
                 selectedKeys.forEach(id => {
                     const r = regionData[id];
+
+                    // NRS Subjective
+                    const nrsSubHtml = `
+                        <div>
+                            <div class="flex justify-between items-end mb-2">
+                                <label class="form-label mb-0">${r.label} NRS <span class="text-[10px] text-gray-400 font-normal ml-1">(Pre-treatment)</span></label>
+                                <span class="text-brand-green font-bold text-lg" id="nrsDisplay_${id}">7/10</span>
+                            </div>
+                            <input type="range" id="f_nrsScore_${id}" name="nrsScore_${id}" min="0" max="10" value="7" oninput="document.getElementById('nrsDisplay_${id}').textContent = this.value + '/10'" class="w-full">
+                            <div class="flex justify-between text-xs text-gray-400 mt-2 font-medium px-1">
+                                <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+                            </div>
+                        </div>
+                    `;
+                    nrsSubjectiveContainer.insertAdjacentHTML('beforeend', nrsSubHtml);
+
+                    // NRS Plan
+                    const nrsPlanHtml = `
+                        <div>
+                            <div class="flex justify-between items-end mb-2">
+                                <label class="form-label mb-0">${r.label} NRS <span class="text-[10px] text-gray-400 font-normal ml-1">(Post-treatment)</span></label>
+                                <span class="text-brand-green font-bold text-lg" id="responseNrsDisplay_${id}">7/10</span>
+                            </div>
+                            <input type="range" id="f_responseNrs_${id}" name="responseNrs_${id}" min="0" max="10" value="7" oninput="document.getElementById('responseNrsDisplay_${id}').textContent = this.value + '/10'" class="w-full">
+                            <div class="flex justify-between text-xs text-gray-400 mt-2 font-medium px-1">
+                                <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+                            </div>
+                        </div>
+                    `;
+                    nrsPlanContainer.insertAdjacentHTML('beforeend', nrsPlanHtml);
 
                     // ROM Section
                     let romHtml = `
@@ -1381,7 +1412,16 @@
                 if (painChangeVal) {
                     subjectiveText += `2. 통증 변화 기록: ${painChangeVal}\n`;
                 }
-                subjectiveText += `3. Pain intensity (VAS): VAS ${getVal('f_vasScore')}/10, ${getVal('painFreq')}`;
+                let nrsText = selectedRegionKeys.map(key => {
+                    return `   - ${regionData[key].label}: NRS ${getVal(`f_nrsScore_${key}`)}/10`;
+                }).join('\n');
+                if (!nrsText) nrsText = "   - 선택된 부위 없음";
+                subjectiveText += `3. Pain intensity (NRS):\n${nrsText}\n   (통증 빈도: ${getVal('painFreq')})`;
+
+                let responseNrsText = selectedRegionKeys.map(key => {
+                    return `   - ${regionData[key].label}: NRS ${getVal(`f_responseNrs_${key}`)}/10`;
+                }).join('\n');
+                if (!responseNrsText) responseNrsText = "   - 선택된 부위 없음";
 
                 const report =
                     `[치료 시간] ${getVal('f_startTime')} - ${getVal('f_endTime')} (총 치료 시간: ${document.getElementById('f_totalTime').textContent})
@@ -1403,7 +1443,8 @@ P) Plan
  - 수동 중재: ${getVal('techPassive')}
  - 적용 부위: ${getVal('techArea')}
  - 능동 중재: ${getVal('techActive')}
-2. Patient Response: ${getVal('ptResponse')} (VAS ${getVal('f_responseVas')}/10)
+2. Patient Response: ${getVal('ptResponse')}
+${responseNrsText}
 3. Follow-up Plan: ${getVal('f_followUp')}
 `;
 
@@ -1503,11 +1544,18 @@ P) Plan
                     const extractedPainChange = extract(/2\. 통증 변화 기록:\s*(.*)/);
                     checkRadios('painChange', extractedPainChange ? extractedPainChange : '첫 회차');
 
-                    const vasMatch = text.match(/3\. Pain intensity \(VAS\): VAS (\d+)\/10,\s*(.*)/);
-                    if (vasMatch) {
-                        document.getElementById('f_vasScore').value = vasMatch[1];
-                        document.getElementById('vasDisplay').textContent = vasMatch[1] + '/10';
-                        checkCheckboxes('painFreq', vasMatch[2]);
+                    let globalVasToApply = null;
+                    let nrsSubjectiveBlock = null;
+                    const nrsBlockMatch = text.match(/3\. Pain intensity \(NRS\):([\s\S]*?)\(통증 빈도:\s*(.*?)\)/);
+                    if (nrsBlockMatch) {
+                        checkCheckboxes('painFreq', nrsBlockMatch[2]);
+                        nrsSubjectiveBlock = nrsBlockMatch[1];
+                    } else {
+                        const vasMatch = text.match(/3\. Pain intensity \(VAS\): VAS (\d+)\/10,\s*(.*)/);
+                        if (vasMatch) {
+                            checkCheckboxes('painFreq', vasMatch[2]);
+                            globalVasToApply = vasMatch[1];
+                        }
                     }
 
                     const swellingMatch = text.match(/1\. 부종:\s*(.*)/);
@@ -1550,6 +1598,27 @@ P) Plan
 
                     selectedRegionKeys.forEach(key => {
                         const r = regionData[key];
+                        
+                        // Apply Subjective NRS
+                        if (nrsSubjectiveBlock) {
+                            const nrsLines = nrsSubjectiveBlock.split('\n');
+                            nrsLines.forEach(l => {
+                                if (l.includes(r.label)) {
+                                    const m = l.match(/NRS (\d+)\/10/);
+                                    if (m) {
+                                        const el = document.getElementById(`f_nrsScore_${key}`);
+                                        if (el) el.value = m[1];
+                                        const dEl = document.getElementById(`nrsDisplay_${key}`);
+                                        if (dEl) dEl.textContent = m[1] + '/10';
+                                    }
+                                }
+                            });
+                        } else if (globalVasToApply) {
+                            const el = document.getElementById(`f_nrsScore_${key}`);
+                            if (el) el.value = globalVasToApply;
+                            const dEl = document.getElementById(`nrsDisplay_${key}`);
+                            if (dEl) dEl.textContent = globalVasToApply + '/10';
+                        }
                         const rRegex = new RegExp(`\\[${r.label} 세부 검사\\]([\\s\\S]*?)(?=\\[.* 세부 검사\\]|6\\. 자세 & 보행|A\\) Assessment|$)`);
                         const rMatch = text.match(rRegex);
                         if (!rMatch) return;
@@ -1601,7 +1670,10 @@ P) Plan
                                     
                                     let spRes = rest;
                                     let spNote = '';
-                                    const resMatch = rest.match(/^(좌\([+-]\)\s*\/\s*우\([+-]\)|L\([+-]\)\s*\/\s*R\([+-]\)|\([+-]\))/);
+                                    
+                                    // More flexible matching for bilateral and single results, tolerating spaces
+                                    const resMatch = rest.match(/^((?:좌|L)\s*\(\s*[+-]\s*\)\s*\/\s*(?:우|R)\s*\(\s*[+-]\s*\)|\(\s*[+-]\s*\)|양성\s*\(\s*\+\s*\)|음성\s*\(\s*-\s*\))/);
+                                    
                                     if (resMatch) {
                                         spRes = resMatch[1];
                                         let notePart = rest.substring(resMatch[0].length).trim();
@@ -1614,7 +1686,7 @@ P) Plan
 
                                     let spIndex = r.spList.findIndex(s => s.name === spName);
                                     if (spIndex === -1) {
-                                        const isBi = spRes.includes('L(') || spRes.includes('R(') || spRes.includes('좌(') || spRes.includes('우(');
+                                        const isBi = /(좌|L|우|R)/.test(spRes);
                                         r.spList.push({ name: spName, bilateral: isBi });
                                         spIndex = r.spList.length - 1;
                                         const rowHtml = generateSpRow(key, r.spList[spIndex], spIndex);
@@ -1629,12 +1701,15 @@ P) Plan
                                     if (omitEl) omitEl.checked = false;
 
                                     if (spObj.bilateral) {
-                                        const lMatch = spRes.match(/좌\((.*?)\)/) || spRes.match(/L\((.*?)\)/);
-                                        const rMatch = spRes.match(/우\((.*?)\)/) || spRes.match(/R\((.*?)\)/);
+                                        const lMatch = spRes.match(/(?:좌|L)\s*\(\s*([+-])\s*\)/);
+                                        const rMatch = spRes.match(/(?:우|R)\s*\(\s*([+-])\s*\)/);
                                         if (lMatch) checkRadios(`spRes_${idBase}_L`, `(${lMatch[1]})`);
                                         if (rMatch) checkRadios(`spRes_${idBase}_R`, `(${rMatch[1]})`);
                                     } else {
-                                        checkRadios(`spRes_${idBase}`, spRes);
+                                        const sMatch = spRes.match(/\(\s*([+-])\s*\)/);
+                                        if (sMatch) {
+                                            checkRadios(`spRes_${idBase}`, `(${sMatch[1]})`);
+                                        }
                                     }
 
                                     if (spNote) {
@@ -1672,14 +1747,43 @@ P) Plan
                     const activeMatch = text.match(/-\s*능동 중재:\s*(.*)/);
                     if (activeMatch) checkCheckboxes('techActive', activeMatch[1]);
 
-                    const ptResMatch = text.match(/2\. Patient Response:\s*(.*?)\s*\(VAS\s*(\d+)\/10\)/);
-                    if (ptResMatch) {
-                        checkCheckboxes('ptResponse', ptResMatch[1]);
-                        const rvas = document.getElementById('f_responseVas');
-                        if (rvas) rvas.value = ptResMatch[2];
-                        const rvasD = document.getElementById('responseVasDisplay');
-                        if (rvasD) rvasD.textContent = ptResMatch[2] + '/10';
+                    let globalResponseVas = null;
+                    let nrsPlanBlock = null;
+                    const oldVasResMatch = text.match(/2\. Patient Response:\s*(.*?)\s*\(VAS\s*(\d+)\/10\)/);
+                    
+                    if (oldVasResMatch) {
+                        checkCheckboxes('ptResponse', oldVasResMatch[1]);
+                        globalResponseVas = oldVasResMatch[2];
+                    } else {
+                        const newNrsResMatch = text.match(/2\. Patient Response:\s*(.*?)\n([\s\S]*?)(?=3\. Follow-up Plan:)/);
+                        if (newNrsResMatch) {
+                            checkCheckboxes('ptResponse', newNrsResMatch[1]);
+                            nrsPlanBlock = newNrsResMatch[2];
+                        }
                     }
+
+                    selectedRegionKeys.forEach(key => {
+                        const r = regionData[key];
+                        if (globalResponseVas) {
+                            const el = document.getElementById(`f_responseNrs_${key}`);
+                            if (el) el.value = globalResponseVas;
+                            const dEl = document.getElementById(`responseNrsDisplay_${key}`);
+                            if (dEl) dEl.textContent = globalResponseVas + '/10';
+                        } else if (nrsPlanBlock) {
+                            const nrsLines = nrsPlanBlock.split('\n');
+                            nrsLines.forEach(l => {
+                                if (l.includes(r.label)) {
+                                    const m = l.match(/NRS (\d+)\/10/);
+                                    if (m) {
+                                        const el = document.getElementById(`f_responseNrs_${key}`);
+                                        if (el) el.value = m[1];
+                                        const dEl = document.getElementById(`responseNrsDisplay_${key}`);
+                                        if (dEl) dEl.textContent = m[1] + '/10';
+                                    }
+                                }
+                            });
+                        }
+                    });
 
                     const fwMatch = text.match(/3\. Follow-up Plan:\s*(.*)/);
                     if (fwMatch) {
