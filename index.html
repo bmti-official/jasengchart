@@ -1049,7 +1049,7 @@
                                         <span class="text-xs font-medium text-gray-400">/ ${item.norm}º</span>
                                     </div>
                                     <div class="flex items-center justify-center gap-1">
-                                        <input id="f_prom_${idBase}" type="text" class="form-input w-24 px-1 py-1 text-center text-sm font-semibold text-brand-green bg-white shadow-sm" value="Full PROM">
+                                        <input id="f_prom_${idBase}" type="text" class="form-input w-16 px-1 py-1 text-center text-sm font-semibold text-brand-green bg-white shadow-sm" value="${item.norm}">
                                         <span class="text-xs font-medium text-gray-400">/ ${item.norm}º</span>
                                     </div>
                                 </div>`;
@@ -1336,8 +1336,7 @@
                             const idBase = `${id}_${item.name.replace(/[^a-zA-Z]/g, '')}`;
                             const arom = getVal(`f_arom_${idBase}`);
                             const prom = getVal(`f_prom_${idBase}`);
-                            const promStr = prom === "Full PROM" ? prom : `${prom}/${item.norm}º`;
-                            return `   - ${item.name}: AROM ${arom}/${item.norm}º, PROM ${promStr}`;
+                            return `   - ${item.name}: AROM ${arom}/${item.norm}º, PROM ${prom}/${item.norm}º`;
                         }).join('\n');
                         romText = `\n${inputTexts}\n - Limitation: ${limitText}`;
 
@@ -1564,10 +1563,12 @@ P) Plan
                             if (causeInput && hasLimit && limitMatch[2]) {
                                 causeInput.value = limitMatch[2].trim();
                             }
+                        }
+
                         r.romInputs.forEach(item => {
                             const idBase = `${key}_${item.name.replace(/[^a-zA-Z]/g, '')}`;
                             const escapedName = item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                            const itemRegex = new RegExp(`-\\s*\\${escapedName}:\\s*AROM\\s*([^/\\n]+)/\\d+º,\\s*PROM\\s*([^/\\n]+)`);
+                            const itemRegex = new RegExp(`-\\s*${escapedName}:\\s*AROM\\s*(\\d+)/\\d+º,\\s*PROM\\s*(\\d+)/\\d+º`);
                             const iMatch = rText.match(itemRegex);
                             if (iMatch) {
                                 const elArom = document.getElementById(`f_arom_${idBase}`);
@@ -1580,7 +1581,7 @@ P) Plan
                         r.mmtItems.forEach(item => {
                             const idBase = `${key}_${item.replace(/[^a-zA-Z]/g, '')}`;
                             const escapedName = item.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                            const itemRegex = new RegExp(`-\\s*\\${escapedName}:\\s*Grade\\s*([+0-5]+)\\/5`);
+                            const itemRegex = new RegExp(`-\\s*${escapedName}:\\s*Grade\\s*([+0-5]+)\\/5`);
                             const iMatch = rText.match(itemRegex);
                             if (iMatch) {
                                 checkRadios(`mmtGrade_${idBase}`, `${iMatch[1]}/5`);
