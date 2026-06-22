@@ -1049,7 +1049,7 @@
                                         <span class="text-xs font-medium text-gray-400">/ ${item.norm}º</span>
                                     </div>
                                     <div class="flex items-center justify-center gap-1">
-                                        <input id="f_prom_${idBase}" type="text" class="form-input w-16 px-1 py-1 text-center text-sm font-semibold text-brand-green bg-white shadow-sm" value="${defaultVal}">
+                                        <input id="f_prom_${idBase}" type="text" class="form-input w-24 px-1 py-1 text-center text-sm font-semibold text-brand-green bg-white shadow-sm" value="Full PROM">
                                         <span class="text-xs font-medium text-gray-400">/ ${item.norm}º</span>
                                     </div>
                                 </div>`;
@@ -1071,8 +1071,11 @@
                                     <div class="col-span-4 text-sm font-medium text-gray-700">${item}</div>
                                     <div class="col-span-8 flex justify-center gap-1 flex-wrap">
                                         <label class="cursor-pointer check-pill"><input type="radio" name="mmtGrade_${idBase}" value="5/5" class="peer sr-only"><span class="block w-8 h-8 leading-8 text-center rounded-lg border border-gray-200 text-xs font-bold text-gray-600 transition-colors">5</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="radio" name="mmtGrade_${idBase}" value="+4/5" class="peer sr-only"><span class="block w-8 h-8 leading-8 text-center rounded-lg border border-gray-200 text-xs font-bold text-gray-600 transition-colors">+4</span></label>
                                         <label class="cursor-pointer check-pill"><input type="radio" name="mmtGrade_${idBase}" value="4/5" class="peer sr-only"><span class="block w-8 h-8 leading-8 text-center rounded-lg border border-gray-200 text-xs font-bold text-gray-600 transition-colors">4</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="radio" name="mmtGrade_${idBase}" value="+3/5" class="peer sr-only"><span class="block w-8 h-8 leading-8 text-center rounded-lg border border-gray-200 text-xs font-bold text-gray-600 transition-colors">+3</span></label>
                                         <label class="cursor-pointer check-pill"><input type="radio" name="mmtGrade_${idBase}" value="3/5" class="peer sr-only" checked><span class="block w-8 h-8 leading-8 text-center rounded-lg border border-gray-200 text-xs font-bold text-gray-600 transition-colors">3</span></label>
+                                        <label class="cursor-pointer check-pill"><input type="radio" name="mmtGrade_${idBase}" value="+2/5" class="peer sr-only"><span class="block w-8 h-8 leading-8 text-center rounded-lg border border-gray-200 text-xs font-bold text-gray-600 transition-colors">+2</span></label>
                                         <label class="cursor-pointer check-pill"><input type="radio" name="mmtGrade_${idBase}" value="2/5" class="peer sr-only"><span class="block w-8 h-8 leading-8 text-center rounded-lg border border-gray-200 text-xs font-bold text-gray-600 transition-colors">2</span></label>
                                         <label class="cursor-pointer check-pill"><input type="radio" name="mmtGrade_${idBase}" value="1/5" class="peer sr-only"><span class="block w-8 h-8 leading-8 text-center rounded-lg border border-gray-200 text-xs font-bold text-gray-600 transition-colors">1</span></label>
                                         <label class="cursor-pointer check-pill"><input type="radio" name="mmtGrade_${idBase}" value="0/5" class="peer sr-only"><span class="block w-8 h-8 leading-8 text-center rounded-lg border border-gray-200 text-xs font-bold text-gray-600 transition-colors">0</span></label>
@@ -1333,7 +1336,8 @@
                             const idBase = `${id}_${item.name.replace(/[^a-zA-Z]/g, '')}`;
                             const arom = getVal(`f_arom_${idBase}`);
                             const prom = getVal(`f_prom_${idBase}`);
-                            return `   - ${item.name}: AROM ${arom}/${item.norm}º, PROM ${prom}/${item.norm}º`;
+                            const promStr = prom === "Full PROM" ? prom : `${prom}/${item.norm}º`;
+                            return `   - ${item.name}: AROM ${arom}/${item.norm}º, PROM ${promStr}`;
                         }).join('\n');
                         romText = `\n${inputTexts}\n - Limitation: ${limitText}`;
 
@@ -1560,25 +1564,23 @@ P) Plan
                             if (causeInput && hasLimit && limitMatch[2]) {
                                 causeInput.value = limitMatch[2].trim();
                             }
-                        }
-
                         r.romInputs.forEach(item => {
                             const idBase = `${key}_${item.name.replace(/[^a-zA-Z]/g, '')}`;
                             const escapedName = item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                            const itemRegex = new RegExp(`-\\s*${escapedName}:\\s*AROM\\s*(\\d+)/\\d+º,\\s*PROM\\s*(\\d+)/\\d+º`);
+                            const itemRegex = new RegExp(`-\\s*\\${escapedName}:\\s*AROM\\s*([^/\\n]+)/\\d+º,\\s*PROM\\s*([^/\\n]+)`);
                             const iMatch = rText.match(itemRegex);
                             if (iMatch) {
                                 const elArom = document.getElementById(`f_arom_${idBase}`);
                                 const elProm = document.getElementById(`f_prom_${idBase}`);
-                                if (elArom) elArom.value = iMatch[1];
-                                if (elProm) elProm.value = iMatch[2];
+                                if (elArom) elArom.value = iMatch[1].trim();
+                                if (elProm) elProm.value = iMatch[2].trim();
                             }
                         });
 
                         r.mmtItems.forEach(item => {
                             const idBase = `${key}_${item.replace(/[^a-zA-Z]/g, '')}`;
                             const escapedName = item.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                            const itemRegex = new RegExp(`-\\s*${escapedName}:\\s*Grade\\s*(\\d)\\/5`);
+                            const itemRegex = new RegExp(`-\\s*\\${escapedName}:\\s*Grade\\s*([+0-5]+)\\/5`);
                             const iMatch = rText.match(itemRegex);
                             if (iMatch) {
                                 checkRadios(`mmtGrade_${idBase}`, `${iMatch[1]}/5`);
