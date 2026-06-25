@@ -957,11 +957,7 @@
                     romStyle: 'inputs',
                     romInputs: [],
                     mmtItems: ['Frontalis', 'Orbicularis oculi', 'Zygomaticus', 'Orbicularis oris', 'Platysma'],
-                    spList: [
-                        { name: 'H-B Grade', bilateral: true },
-                        { name: "Chvostek's sign", bilateral: true },
-                        { name: "Schirmer's test", bilateral: true }
-                    ]
+                    spList: []
                 }
             };
 
@@ -1143,26 +1139,35 @@
                     `;
 
                     // Special Tests Section
-                    let spHtml = `
-                        <div class="mb-4 bg-gray-50 rounded-lg p-4 border border-gray-100">
-                            <div class="grid grid-cols-12 gap-2 mb-3 pb-2 border-b border-gray-200">
-                                <div class="col-span-3 text-xs font-bold text-gray-500 uppercase tracking-wider">항목</div>
-                                <div class="col-span-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">결과</div>
-                                <div class="col-span-4 text-xs font-bold text-gray-500 uppercase tracking-wider">특이사항</div>
-                                <div class="col-span-1 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">생략</div>
+                    let fullSpSection = "";
+                    if (id !== 'face') {
+                        let spHtml = `
+                            <div class="mb-4 bg-gray-50 rounded-lg p-4 border border-gray-100">
+                                <div class="grid grid-cols-12 gap-2 mb-3 pb-2 border-b border-gray-200">
+                                    <div class="col-span-3 text-xs font-bold text-gray-500 uppercase tracking-wider">항목</div>
+                                    <div class="col-span-4 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">결과</div>
+                                    <div class="col-span-4 text-xs font-bold text-gray-500 uppercase tracking-wider">특이사항</div>
+                                    <div class="col-span-1 text-xs font-bold text-gray-500 uppercase tracking-wider text-center">생략</div>
+                                </div>
+                                <div id="spListContainer_${id}">
+                                    ${r.spList.map((spObj, idx) => generateSpRow(id, spObj, idx)).join('')}
+                                </div>
+                                <div class="mt-3 flex gap-2 items-center">
+                                    <input type="text" id="f_newSp_${id}" class="form-input text-xs px-2 py-1.5 h-[34px] w-full" placeholder="새로운 스페셜 테스트 입력">
+                                    <label class="flex items-center gap-1 text-xs text-gray-600 whitespace-nowrap">
+                                        <input type="checkbox" id="f_newSp_bi_${id}" class="rounded border-gray-300" checked> 좌우 구분
+                                    </label>
+                                    <button type="button" class="bg-brand-green hover:bg-brand-greenHover text-white px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap btn-add-sp" data-region="${id}">추가</button>
+                                </div>
                             </div>
-                            <div id="spListContainer_${id}">
-                                ${r.spList.map((spObj, idx) => generateSpRow(id, spObj, idx)).join('')}
+                        `;
+                        fullSpSection = `
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-900 mb-4">5. Special tests</h4>
+                                ${spHtml}
                             </div>
-                            <div class="mt-3 flex gap-2 items-center">
-                                <input type="text" id="f_newSp_${id}" class="form-input text-xs px-2 py-1.5 h-[34px] w-full" placeholder="새로운 스페셜 테스트 입력">
-                                <label class="flex items-center gap-1 text-xs text-gray-600 whitespace-nowrap">
-                                    <input type="checkbox" id="f_newSp_bi_${id}" class="rounded border-gray-300" checked> 좌우 구분
-                                </label>
-                                <button type="button" class="bg-brand-green hover:bg-brand-greenHover text-white px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap btn-add-sp" data-region="${id}">추가</button>
-                            </div>
-                        </div>
-                    `;
+                        `;
+                    }
 
                     let fullRomSection = "";
                     if (r.romInputs && r.romInputs.length > 0) {
@@ -1198,10 +1203,7 @@
                                 ${mmtHtml}
                             </div>
 
-                            <div>
-                                <h4 class="text-sm font-semibold text-gray-900 mb-4">5. Special tests</h4>
-                                ${spHtml}
-                            </div>
+                            ${fullSpSection}
                         </div>
                     `;
                     dynamicContainer.insertAdjacentHTML('beforeend', html);
@@ -1407,28 +1409,31 @@
                             mmtText += `\n   - ${item}: Grade ${getVal(`mmtGrade_${idBase}`)}`;
                         });
 
-                        let spText = `\n5. Special tests:`;
-                        r.spList.forEach((spObj, idx) => {
-                            const idBase = `${id}_sp_${idx}`;
-                            const omitEl = document.getElementById(`f_spOmit_${idBase}`);
-                            if (omitEl && omitEl.checked) return;
+                        let spText = "";
+                        if (id !== 'face') {
+                            spText = `\n5. Special tests:`;
+                            r.spList.forEach((spObj, idx) => {
+                                const idBase = `${id}_sp_${idx}`;
+                                const omitEl = document.getElementById(`f_spOmit_${idBase}`);
+                                if (omitEl && omitEl.checked) return;
 
-                            let res = "";
-                            if (spObj.bilateral) {
-                                const lRes = getVal(`spRes_${idBase}_L`);
-                                const rRes = getVal(`spRes_${idBase}_R`);
-                                res = `좌${lRes} / 우${rRes}`;
-                            } else {
-                                res = getVal(`spRes_${idBase}`);
+                                let res = "";
+                                if (spObj.bilateral) {
+                                    const lRes = getVal(`spRes_${idBase}_L`);
+                                    const rRes = getVal(`spRes_${idBase}_R`);
+                                    res = `좌${lRes} / 우${rRes}`;
+                                } else {
+                                    res = getVal(`spRes_${idBase}`);
+                                }
+
+                                const note = getVal(`f_spNote_${idBase}`);
+                                const noteText = note ? ` (${note})` : '';
+                                spText += `\n   - ${spObj.name}: ${res}${noteText}`;
+                            });
+                            
+                            if (spText === `\n5. Special tests:`) {
+                                spText += ` 생략됨`;
                             }
-
-                            const note = getVal(`f_spNote_${idBase}`);
-                            const noteText = note ? ` (${note})` : '';
-                            spText += `\n   - ${spObj.name}: ${res}${noteText}`;
-                        });
-                        
-                        if (spText === `\n5. Special tests:`) {
-                            spText += ` 생략됨`;
                         }
 
                         dynamicReportText += `
@@ -1690,7 +1695,7 @@ ${responseNrsText}
                         });
 
                         const spBlockMatch = rText.match(/5\. Special tests:([\s\S]*)/);
-                        if (spBlockMatch) {
+                        if (spBlockMatch && key !== 'face') {
                             const spLines = spBlockMatch[1].split('\n').filter(l => l.trim().startsWith('-'));
                             const matchedSpNames = new Set();
                             spLines.forEach(line => {
