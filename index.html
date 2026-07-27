@@ -662,8 +662,11 @@
                                         class="text-xs font-semibold text-gray-500 mb-2 block tracking-wider">적용부위</label>
                                     <div class="flex flex-wrap gap-2">
                                         <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
-                                                value="Thoracolumbar" class="peer sr-only"><span
-                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Thoracolumbar <span class="text-[11px] text-gray-400 font-normal ml-0.5">(흉요추부)</span></span></label>
+                                                value="Thoracic" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Thoracic <span class="text-[11px] text-gray-400 font-normal ml-0.5">(흉추부)</span></span></label>
+                                        <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
+                                                value="Lumbar" class="peer sr-only"><span
+                                                class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Lumbar <span class="text-[11px] text-gray-400 font-normal ml-0.5">(요추부)</span></span></label>
                                         <label class="cursor-pointer check-pill"><input type="checkbox" name="techArea"
                                                 value="Shoulder" class="peer sr-only"><span
                                                 class="block px-3 py-1.5 rounded-full border border-gray-200 text-xs font-medium text-gray-600 transition-colors">Shoulder <span class="text-[11px] text-gray-400 font-normal ml-0.5">(어깨)</span></span></label>
@@ -836,10 +839,10 @@
                     label: "Lumbar",
                     romStyle: 'inputs',
                     romInputs: [
-                        { name: 'Rotation', norm: '30' },
                         { name: 'Flexion', norm: '90' },
                         { name: 'Extension', norm: '30' },
-                        { name: 'Lat. Bending', norm: '35' }
+                        { name: 'Lat. Bending', norm: '35' },
+                        { name: 'Rotation', norm: '30' }
                     ],
                     mmtItems: ['Flexion', 'Extension', 'Lat. Bending', 'Rotation'],
                     spList: [
@@ -852,6 +855,7 @@
                     label: "Shoulder",
                     romStyle: 'inputs',
                     romInputs: [
+                        { name: 'Flexion', norm: '180' },
                         { name: 'Extension', norm: '60' },
                         { name: 'Abduction', norm: '180' },
                         { name: 'Hori. abd.', norm: '45' },
