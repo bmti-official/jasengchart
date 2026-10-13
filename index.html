@@ -190,9 +190,9 @@
         <div class="flex items-center space-x-4 sm:space-x-8 overflow-x-auto whitespace-nowrap flex-1 mr-4 hide-scroll">
             <a href="#section-session" class="nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">도수치료 챠트</a>
             <a href="#section-subjective" class="nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">S</a>
-            <a href="#section-objective" class="nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">O</a>
-            <a href="#section-assessment" class="nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">A</a>
-            <a href="#section-plan" class="nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">P</a>
+            <a href="#section-objective" class="nc-hide nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">O</a>
+            <a href="#section-assessment" class="nc-hide nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">A</a>
+            <a href="#section-plan" class="nc-hide nav-link font-bold text-gray-400 hover:text-gray-900 text-sm sm:text-[15px] scroll-text transition-colors">P</a>
         </div>
 
         <div class="flex items-center justify-end space-x-2 shrink-0">
@@ -273,8 +273,18 @@
                         Subjective <span class="text-xs text-gray-400 font-normal ml-1">(주관적 증상)</span>
                     </h2>
 
+                    <!-- 비급여 토글 -->
+                    <div id="nonCoveredBox" class="flex items-center justify-between gap-4 mb-6 p-4 rounded-xl border border-dashed border-orange-200 bg-orange-50/40 transition-colors">
+                        <div>
+                            <p class="text-sm font-semibold text-gray-800">비급여 <span class="text-xs text-gray-400 font-normal ml-1">(체형교정 · 피로회복)</span></p>
+                            <p class="text-xs text-gray-500 mt-0.5" id="nonCoveredHint">활성화 시 치료 시간과 비급여 문구만 복사됩니다.</p>
+                        </div>
+                        <button type="button" id="nonCoveredBtn" aria-pressed="false"
+                            class="shrink-0 px-5 py-2 rounded-full border text-sm font-bold transition-colors shadow-sm bg-white text-orange-600 border-orange-300 hover:bg-orange-50">비급여</button>
+                    </div>
+
                     <!-- 치료 부위 선택기 -->
-                    <div class="pb-6 border-b border-gray-100 bg-brand-bg/30 p-6 rounded-xl border border-gray-200 mb-8">
+                    <div class="nc-hide pb-6 border-b border-gray-100 bg-brand-bg/30 p-6 rounded-xl border border-gray-200 mb-8">
                         <h3 class="text-sm font-bold text-brand-green mb-4 flex justify-between items-center">
                             치료 부위 선택 (최대 2개)
                             <span class="text-xs font-normal text-gray-500" id="regionCountText">0개 선택됨</span>
@@ -284,7 +294,7 @@
                         </div>
                     </div>
 
-                    <div class="space-y-8">
+                    <div class="nc-hide space-y-8">
                         <div>
                             <label class="form-label">1. C/C (주호소 / Chief Complaint)</label>
                             <input id="f_cc" type="text" class="form-input"
@@ -357,7 +367,7 @@
             </section>
 
             <!-- O) Objective -->
-            <section id="section-objective" class="scroll-section">
+            <section id="section-objective" class="nc-hide scroll-section">
                 <div class="bg-white rounded-2xl card-shadow p-8 border border-gray-100">
                     <h2 class="text-lg font-semibold text-brand-green mb-6 flex items-center gap-2">
                         <span
@@ -560,7 +570,7 @@
             </section>
 
             <!-- A) Assessment -->
-            <section id="section-assessment" class="scroll-section">
+            <section id="section-assessment" class="nc-hide scroll-section">
                 <div class="bg-white rounded-2xl card-shadow p-8 border border-gray-100">
                     <h2 class="text-lg font-semibold text-brand-green mb-6 flex items-center gap-2">
                         <span
@@ -620,7 +630,7 @@
             </section>
 
             <!-- P) Plan -->
-            <section id="section-plan" class="scroll-section">
+            <section id="section-plan" class="nc-hide scroll-section">
                 <div class="bg-white rounded-2xl card-shadow p-8 border border-gray-100">
                     <h2 class="text-lg font-semibold text-brand-green mb-6 flex items-center gap-2">
                         <span
@@ -829,10 +839,10 @@
                     romInputs: [
                         { name: 'Flexion', norm: '50' },
                         { name: 'Extension', norm: '55' },
-                        { name: 'Lat. Bending', norm: '60' },
-                        { name: 'Rotation', norm: '75' }
+                        { name: 'Rotation', norm: '75' },
+                        { name: 'Lat. Bending', norm: '60' }
                     ],
-                    mmtItems: ['Flexion', 'Extension', 'Lat. Bending', 'Rotation'],
+                    mmtItems: ['Flexion', 'Extension', 'Rotation', 'Lat. Bending'],
                     spList: [{ name: 'Spurling', bilateral: true }]
                 },
                 lumbar: {
@@ -841,10 +851,10 @@
                     romInputs: [
                         { name: 'Flexion', norm: '90' },
                         { name: 'Extension', norm: '30' },
-                        { name: 'Lat. Bending', norm: '35' },
-                        { name: 'Rotation', norm: '30' }
+                        { name: 'Rotation', norm: '45' },
+                        { name: 'Lat. Bending', norm: '35' }
                     ],
-                    mmtItems: ['Flexion', 'Extension', 'Lat. Bending', 'Rotation'],
+                    mmtItems: ['Flexion', 'Extension', 'Rotation', 'Lat. Bending'],
                     spList: [
                         { name: 'SLR', bilateral: true },
                         { name: 'Patrick', bilateral: true },
@@ -964,6 +974,16 @@
                     spList: []
                 }
             };
+
+            // Limitation 원인 추천 목록
+            const ROM_CAUSE_OPTIONS = [
+                '통증으로 인한 ROM 제한',
+                '근육 긴장(단축)으로 인한 ROM 제한',
+                '관절 강직(Stiffness)으로 인한 ROM 제한',
+                '신경 긴장(Neural tension)으로 인한 ROM 제한',
+                '수술 후 관절 구축으로 인한 ROM 제한'
+            ];
+            const ROM_CAUSE_CUSTOM = '직접 입력';
 
             function generateSpRow(regionId, spObj, index) {
                 const idBase = `${regionId}_sp_${index}`;
@@ -1189,7 +1209,12 @@
                                     </div>
                                     <div>
                                         <label class="form-label">원인</label>
-                                        <input id="f_romCause_${id}" type="text" class="form-input" placeholder="예: 통증으로 인한 ROM 제한" value="">
+                                        <select id="f_romCauseSel_${id}" class="form-select">
+                                            <option value="">원인 선택</option>
+                                            ${ROM_CAUSE_OPTIONS.map(o => `<option value="${o}">${o}</option>`).join('')}
+                                            <option value="${ROM_CAUSE_CUSTOM}">${ROM_CAUSE_CUSTOM}</option>
+                                        </select>
+                                        <input id="f_romCause_${id}" type="text" class="form-input mt-2 hidden" placeholder="원인을 직접 입력하세요" value="">
                                     </div>
                                 </div>
                             </div>
@@ -1233,19 +1258,37 @@
                     });
                 });
 
-                // Limitation 없음을 눌렀을 때 원인 적을 수 없게 만들기
+                // Limitation 없음을 눌렀을 때 원인 선택/입력 불가 + 직접 입력 토글
                 selectedKeys.forEach(id => {
                     const limitRadios = document.querySelectorAll(`input[name="romLimit_${id}"]`);
+                    const causeSel = document.getElementById(`f_romCauseSel_${id}`);
                     const causeInput = document.getElementById(`f_romCause_${id}`);
+                    if (!causeSel || !causeInput) return;
+                    const disabledCls = ['bg-gray-100', 'cursor-not-allowed', 'opacity-50'];
+
+                    causeSel.addEventListener('change', (e) => {
+                        if (causeSel.value === ROM_CAUSE_CUSTOM) {
+                            causeInput.classList.remove('hidden');
+                            if (e.isTrusted) causeInput.focus();
+                        } else {
+                            causeInput.classList.add('hidden');
+                            causeInput.value = '';
+                        }
+                    });
+
                     limitRadios.forEach(radio => {
                         radio.addEventListener('change', (e) => {
-                            if (e.target.value === '없음') {
-                                causeInput.disabled = true;
-                                causeInput.classList.add('bg-gray-100', 'cursor-not-allowed', 'opacity-50');
+                            const off = e.target.value === '없음';
+                            [causeSel, causeInput].forEach(el => {
+                                el.disabled = off;
+                                el.classList.toggle(disabledCls[0], off);
+                                el.classList.toggle(disabledCls[1], off);
+                                el.classList.toggle(disabledCls[2], off);
+                            });
+                            if (off) {
+                                causeSel.value = '';
                                 causeInput.value = '';
-                            } else {
-                                causeInput.disabled = false;
-                                causeInput.classList.remove('bg-gray-100', 'cursor-not-allowed', 'opacity-50');
+                                causeInput.classList.add('hidden');
                             }
                         });
                     });
@@ -1302,9 +1345,46 @@
                 }
             }
 
-            startSelect.addEventListener('change', calculateTotalTime);
+            // 시작 시간 변경 시 종료 시간을 +30분으로 자동 설정 (종료 시간 직접 수정은 그대로 유지)
+            startSelect.addEventListener('change', () => {
+                const [sh, sm] = startSelect.value.split(':').map(Number);
+                const total = sh * 60 + sm + 30;
+                let target = `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+                if (!endTimes.includes(target)) target = endTimes[endTimes.length - 1];
+                endSelect.value = target;
+                calculateTotalTime();
+            });
             endSelect.addEventListener('change', calculateTotalTime);
             calculateTotalTime();
+
+            // --- 비급여 토글 ---
+            const NON_COVERED_TEXT = '질환 치료 목적 아닌 체형교정 및 피로회복의 목적으로 시행';
+            const nonCoveredBtn = document.getElementById('nonCoveredBtn');
+            const nonCoveredBox = document.getElementById('nonCoveredBox');
+            const nonCoveredHint = document.getElementById('nonCoveredHint');
+            let isNonCovered = false;
+
+            function setNonCovered(on) {
+                isNonCovered = on;
+                nonCoveredBtn.setAttribute('aria-pressed', String(on));
+                const onCls = ['bg-orange-500', 'text-white', 'border-orange-500', 'hover:bg-orange-600'];
+                const offCls = ['bg-white', 'text-orange-600', 'border-orange-300', 'hover:bg-orange-50'];
+                onCls.forEach(c => nonCoveredBtn.classList.toggle(c, on));
+                offCls.forEach(c => nonCoveredBtn.classList.toggle(c, !on));
+                nonCoveredBtn.textContent = on ? '비급여 ON' : '비급여';
+                nonCoveredBox.classList.toggle('bg-orange-50', on);
+                nonCoveredBox.classList.toggle('border-solid', on);
+                nonCoveredBox.classList.toggle('border-orange-400', on);
+                nonCoveredHint.textContent = on
+                    ? '비급여 모드: 치료 시간과 비급여 문구만 복사됩니다. (챠트 내용 제외)'
+                    : '활성화 시 치료 시간과 비급여 문구만 복사됩니다.';
+                nonCoveredHint.classList.toggle('text-orange-600', on);
+                nonCoveredHint.classList.toggle('font-semibold', on);
+                // 비급여 모드: S/O/A/P 입력 영역 숨기기 (입력값은 유지되며 OFF 시 그대로 다시 표시)
+                document.querySelectorAll('.nc-hide').forEach(el => el.classList.toggle('hidden', on));
+                nonCoveredBox.classList.toggle('mb-6', !on);
+            }
+            nonCoveredBtn.addEventListener('click', () => setNonCovered(!isNonCovered));
 
 
 
@@ -1363,6 +1443,7 @@
             document.getElementById('resetBtn').addEventListener('click', () => {
                 if (confirm("모든 챠팅 내용이 초기화됩니다. 계속하시겠습니까?")) {
                     document.getElementById('chartForm').reset();
+                    setNonCovered(false);
 
                     // Reset custom displays
                     document.getElementById('swellingLocContainer').classList.remove('hidden');
@@ -1394,7 +1475,8 @@
 
                         if (r.romInputs && r.romInputs.length > 0) {
                             let limitVal = getVal(`romLimit_${id}`);
-                            let causeVal = getVal(`f_romCause_${id}`);
+                            const causeSelVal = getVal(`f_romCauseSel_${id}`);
+                            let causeVal = causeSelVal === ROM_CAUSE_CUSTOM ? getVal(`f_romCause_${id}`) : causeSelVal;
                             let limitText = limitVal === '없음' ? '없음' : `있음 (원인: ${causeVal})`;
 
                             let inputTexts = r.romInputs.map(item => {
@@ -1461,8 +1543,9 @@
                 }).join('\n');
                 if (!responseNrsText) responseNrsText = "   - 선택된 부위 없음";
 
-                const report =
-                    `[치료 시간] ${getVal('f_startTime')} - ${getVal('f_endTime')} (총 치료 시간: ${document.getElementById('f_totalTime').textContent})
+                const timeLine = `[치료 시간] ${getVal('f_startTime')} - ${getVal('f_endTime')} (총 치료 시간: ${document.getElementById('f_totalTime').textContent})`;
+                let report =
+                    `${timeLine}
 
 S) Subjective
 ${subjectiveText}
@@ -1485,6 +1568,11 @@ P) Plan
 ${responseNrsText}
 3. Follow-up Plan: ${getVal('f_followUp')}
 `;
+
+                // 비급여 모드: 치료 시간 + 비급여 문구만 복사
+                if (isNonCovered) {
+                    report = `${timeLine}\n${NON_COVERED_TEXT}`;
+                }
 
                 navigator.clipboard.writeText(report).then(() => {
                     const originalHTML = copyBtn.innerHTML;
@@ -1576,6 +1664,8 @@ ${responseNrsText}
                         calculateTotalTime();
                     }
 
+                    setNonCovered(text.includes(NON_COVERED_TEXT));
+
                     const ccEl = document.getElementById('f_cc');
                     if (ccEl) ccEl.value = extract(/1\. C\/C \(주호소\):[ \t]*(.*)/);
 
@@ -1666,9 +1756,18 @@ ${responseNrsText}
                         if (limitMatch) {
                             const hasLimit = limitMatch[1].includes('있음');
                             checkRadios(`romLimit_${key}`, hasLimit ? '있음' : '없음');
+                            const causeSel = document.getElementById(`f_romCauseSel_${key}`);
                             const causeInput = document.getElementById(`f_romCause_${key}`);
-                            if (causeInput && hasLimit && limitMatch[2]) {
-                                causeInput.value = limitMatch[2].trim();
+                            const causeText = limitMatch[2] ? limitMatch[2].trim() : '';
+                            if (causeSel && causeInput && hasLimit && causeText) {
+                                if (ROM_CAUSE_OPTIONS.includes(causeText)) {
+                                    causeSel.value = causeText;
+                                    causeSel.dispatchEvent(new Event('change'));
+                                } else {
+                                    causeSel.value = ROM_CAUSE_CUSTOM;
+                                    causeSel.dispatchEvent(new Event('change'));
+                                    causeInput.value = causeText;
+                                }
                             }
                         }
 
